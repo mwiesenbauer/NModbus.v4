@@ -3,35 +3,30 @@ using NModbus.Interfaces;
 
 namespace NModbus.Transport.Serial;
 
-public class SerialModbusStream : IModbusStream
+public sealed class SerialModbusStream : IModbusStream
 {
     private const string NEW_LINE = "\r\n";
     private readonly SerialPort _serialPort;
 
     public SerialModbusStream(SerialPort serialPort)
     {
+        serialPort.NewLine = NEW_LINE;
         _serialPort = serialPort;
-        _serialPort.NewLine = NEW_LINE;
     }
 
     public Task<int> ReadAsync(byte[] buffer, int offset, int count, CancellationToken cancellationToken = default)
     {
-        var read = _serialPort.Read(buffer, offset, count);
-
-        return Task.FromResult(read);
+        return _serialPort.BaseStream.ReadAsync(buffer, offset, count, cancellationToken);
     }
 
     public Task WriteAsync(byte[] buffer, int offset, int count, CancellationToken cancellationToken = default)
     {
-        _serialPort.Write(buffer, offset, count);
-
-        return Task.CompletedTask;
+        return _serialPort.BaseStream.WriteAsync(buffer, offset, count, cancellationToken);
     }
 
     public ValueTask DisposeAsync()
     {
         _serialPort.Dispose();
-        GC.SuppressFinalize(this);
         return default;
     }
 }
