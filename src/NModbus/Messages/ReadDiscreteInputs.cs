@@ -3,7 +3,7 @@ using NModbus.Helpers;
 
 namespace NModbus.Messages
 {
-    public class ReadDiscreteInputsMessageSerilizer : ModbusMessageSerializer<ReadDiscreteInputsRequest, ReadDiscreteInputsResponse>
+    public class ReadDiscreteInputsMessageSerializer : ModbusMessageSerializer<ReadDiscreteInputsRequest, ReadDiscreteInputsResponse>
     {
         protected override void SerializeRequestCore(ReadDiscreteInputsRequest request, EndianWriter writer)
         {

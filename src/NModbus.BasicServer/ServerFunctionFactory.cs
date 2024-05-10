@@ -72,7 +72,7 @@ namespace NModbus.BasicServer
                 //Read Discrete Inputs
                 new ModbusServerFunction<ReadDiscreteInputsRequest, ReadDiscreteInputsResponse>(
                     ModbusFunctionCodes.ReadDiscreteInputs,
-                    new ReadDiscreteInputsMessageSerilizer(),
+                    new ReadDiscreteInputsMessageSerializer(),
                     new ReadDiscreteInputsImplementation(loggerFactory, storage.DiscreteInputs)),
 
                 //Mask Write Register

@@ -25,7 +25,7 @@ namespace NModbus
             var defaultClientFunctions = new IClientFunction[]
             {
                 new ModbusClientFunction<ReadCoilsRequest, ReadCoilsResponse>(ModbusFunctionCodes.ReadCoils, new ReadCoilsMessageSerializer()),
-                new ModbusClientFunction<ReadDiscreteInputsRequest, ReadDiscreteInputsResponse>(ModbusFunctionCodes.ReadDiscreteInputs, new ReadDiscreteInputsMessageSerilizer()),
+                new ModbusClientFunction<ReadDiscreteInputsRequest, ReadDiscreteInputsResponse>(ModbusFunctionCodes.ReadDiscreteInputs, new ReadDiscreteInputsMessageSerializer()),
                 new ModbusClientFunction<ReadHoldingRegistersRequest, ReadHoldingRegistersResponse>(ModbusFunctionCodes.ReadHoldingRegisters, new ReadHoldingRegistersMessageSerializer()),
                 new ModbusClientFunction<ReadInputRegistersRequest, ReadInputRegistersResponse>(ModbusFunctionCodes.ReadInputRegisters, new ReadInputRegistersMessageSerializer()),
                 new ModbusClientFunction<WriteSingleCoilRequest, WriteSingleCoilResponse>(ModbusFunctionCodes.WriteSingleCoil, new WriteSingleCoilMessageSerializer()),
