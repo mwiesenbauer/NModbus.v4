@@ -9,6 +9,7 @@ namespace NModbus.BasicServer.Tests.Transport
 {
     public class ClientServer : IAsyncDisposable
     {
+        private const int Port = 5502;
         private readonly ModbusTcpServerNetworkTransport _serverTransport;
         private readonly IModbusClientTransport _clientTransport;
         private readonly IModbusServerNetwork _serverNetwork;
@@ -29,11 +30,11 @@ namespace NModbus.BasicServer.Tests.Transport
             if (!_serverNetwork.TryAddServer(server))
                 throw new InvalidOperationException($"Unable to add server with unit number {server.UnitIdentifier}");
 
-            var tcpListener = new TcpListener(IPAddress.Loopback, ModbusIPPorts.Insecure);
+            var tcpListener = new TcpListener(IPAddress.Loopback, Port);
 
             _serverTransport = new ModbusTcpServerNetworkTransport(tcpListener, _serverNetwork, loggerFactory);
 
-            var tcpClientFactory = new TcpStreamFactory(new IPEndPoint(IPAddress.Loopback, ModbusIPPorts.Insecure));
+            var tcpClientFactory = new TcpStreamFactory(new IPEndPoint(IPAddress.Loopback, Port));
 
             //Create the client
             var tcpClientLifetime = new SingletonStreamConnectionStrategy(tcpClientFactory, loggerFactory);
