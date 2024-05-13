@@ -16,7 +16,7 @@ namespace NModbus.BasicServer.Functions
             _storage = storage ?? throw new ArgumentNullException(nameof(storage));
         }
 
-        public Task<WriteSingleCoilResponse> ProcessAsync(WriteSingleCoilRequest request, CancellationToken cancellationToken)
+        public Task<WriteSingleCoilResponse> ProcessAsync(WriteSingleCoilRequest request, CancellationToken cancellationToken = default)
         {
             _storage.WritePoints(request.OutputAddress, new bool[] { request.OutputValue });
 
