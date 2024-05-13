@@ -14,14 +14,14 @@ namespace NModbus.Transport.IP
             _stream = stream ?? throw new ArgumentNullException(nameof(stream));
         }
 
-        public async Task<int> ReadAsync(byte[] buffer, int offset, int count, CancellationToken cancellationToken = default)
+        public Task<int> ReadAsync(byte[] buffer, int offset, int count, CancellationToken cancellationToken = default)
         {
-            return await _stream.ReadAsync(buffer, offset, count, cancellationToken);
+            return _stream.ReadAsync(buffer, offset, count, cancellationToken);
         }
 
-        public async Task WriteAsync(byte[] buffer, int offset, int count, CancellationToken cancellationToken = default)
+        public Task WriteAsync(byte[] buffer, int offset, int count, CancellationToken cancellationToken = default)
         {
-            await _stream.WriteAsync(buffer, offset, count, cancellationToken);
+            return _stream.WriteAsync(buffer, offset, count, cancellationToken);
         }
 
         public ValueTask DisposeAsync()

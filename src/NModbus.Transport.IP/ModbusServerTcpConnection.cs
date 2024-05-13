@@ -63,7 +63,7 @@ namespace NModbus.Transport.IP
                 _stream = new ModbusStream(sslStream);
             }
 
-            _listenTask = Task.Run(() => ListenAsync(_cancellationTokenSource.Token));
+            _listenTask = Task.Run(() => ListenAsync(_cancellationTokenSource.Token), cancellationToken);
         }
 
         private async Task ListenAsync(CancellationToken cancellationToken)
