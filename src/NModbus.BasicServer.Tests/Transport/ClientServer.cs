@@ -5,55 +5,59 @@ using NModbus.Transport.IP.ConnectionStrategies;
 using System.Net;
 using System.Net.Sockets;
 
-namespace NModbus.BasicServer.Tests.Transport
+namespace NModbus.BasicServer.Tests.Transport;
+
+public class ClientServer : IAsyncDisposable
 {
-    public class ClientServer : IAsyncDisposable
+    private const int Port = 5502;
+    private readonly ModbusTcpServerNetworkTransport _serverTransport;
+    private readonly IModbusClientTransport _clientTransport;
+    private readonly IModbusServerNetwork _serverNetwork;
+
+    public ClientServer(byte unitIdentifier, ILoggerFactory loggerFactory)
     {
-        private const int Port = 5502;
-        private readonly ModbusTcpServerNetworkTransport _serverTransport;
-        private readonly IModbusClientTransport _clientTransport;
-        private readonly IModbusServerNetwork _serverNetwork;
-
-        public ClientServer(byte unitIdentifier, ILoggerFactory loggerFactory)
+        if (loggerFactory is null)
         {
-            if (loggerFactory is null) throw new ArgumentNullException(nameof(loggerFactory));
-
-            UnitIdentifier = unitIdentifier;
-
-            //Create the server
-            _serverNetwork = new ModbusServerNetwork(loggerFactory);
-
-            var serverFunctions = ServerFunctionFactory.CreateBasicServerFunctions(Storage, loggerFactory);
-
-            var server = new ModbusServer(UnitIdentifier, serverFunctions, loggerFactory);
-
-            if (!_serverNetwork.TryAddServer(server))
-                throw new InvalidOperationException($"Unable to add server with unit number {server.UnitIdentifier}");
-
-            var tcpListener = new TcpListener(IPAddress.Loopback, Port);
-
-            _serverTransport = new ModbusTcpServerNetworkTransport(tcpListener, _serverNetwork, loggerFactory);
-
-            var tcpClientFactory = new TcpStreamFactory(new IPEndPoint(IPAddress.Loopback, Port));
-
-            //Create the client
-            var tcpClientLifetime = new SingletonStreamConnectionStrategy(tcpClientFactory, loggerFactory);
-            _clientTransport = new ModbusIPClientTransport(tcpClientLifetime, loggerFactory);
-            Client = new ModbusClient(_clientTransport, loggerFactory);
+            throw new ArgumentNullException(nameof(loggerFactory));
         }
 
-        public byte UnitIdentifier { get; }
+        UnitIdentifier = unitIdentifier;
 
-        public IModbusClient Client { get; }
+        //Create the server
+        _serverNetwork = new ModbusServerNetwork(loggerFactory);
 
-        public Storage Storage { get; } = new Storage();
+        var serverFunctions = ServerFunctionFactory.CreateBasicServerFunctions(Storage, loggerFactory);
 
-        public async ValueTask DisposeAsync()
+        var server = new ModbusServer(UnitIdentifier, serverFunctions, loggerFactory);
+
+        if (!_serverNetwork.TryAddServer(server))
         {
-            await _serverTransport.DisposeAsync();
-            await _clientTransport.DisposeAsync();
-
-            GC.SuppressFinalize(this);
+            throw new InvalidOperationException($"Unable to add server with unit number {server.UnitIdentifier}");
         }
+
+        var tcpListener = new TcpListener(IPAddress.Loopback, Port);
+
+        _serverTransport = new ModbusTcpServerNetworkTransport(tcpListener, _serverNetwork, loggerFactory);
+
+        var tcpClientFactory = new TcpStreamFactory(new IPEndPoint(IPAddress.Loopback, Port));
+
+        //Create the client
+        var tcpClientLifetime = new SingletonStreamConnectionStrategy(tcpClientFactory, loggerFactory);
+        _clientTransport = new ModbusIPClientTransport(tcpClientLifetime, loggerFactory);
+        Client = new ModbusClient(_clientTransport, loggerFactory);
+    }
+
+    public byte UnitIdentifier { get; }
+
+    public IModbusClient Client { get; }
+
+    public Storage Storage { get; } = new();
+
+    public async ValueTask DisposeAsync()
+    {
+        await _serverTransport.DisposeAsync();
+        await _clientTransport.DisposeAsync();
+
+        GC.SuppressFinalize(this);
     }
 }

@@ -3,26 +3,27 @@ using NModbus.BasicServer.Interfaces;
 using NModbus.Interfaces;
 using NModbus.Messages;
 
-namespace NModbus.BasicServer.Functions
+namespace NModbus.BasicServer.Functions;
+
+public class ReadWriteMultipleRegistersImplementation : IModbusFunctionImplementation<ReadWriteMultipleRegistersRequest,
+    ReadWriteMultipleRegistersResponse>
 {
-    public class ReadWriteMultipleRegistersImplementation : IModbusFunctionImplementation<ReadWriteMultipleRegistersRequest, ReadWriteMultipleRegistersResponse>
+    private readonly ILoggerFactory _loggerFactory;
+    private readonly IDevicePointStorage<ushort> _storage;
+
+    public ReadWriteMultipleRegistersImplementation(ILoggerFactory loggerFactory, IDevicePointStorage<ushort> storage)
     {
-        private readonly ILoggerFactory _loggerFactory;
-        private readonly IDevicePointStorage<ushort> _storage;
+        _loggerFactory = loggerFactory ?? throw new ArgumentNullException(nameof(loggerFactory));
+        _storage = storage ?? throw new ArgumentNullException(nameof(storage));
+    }
 
-        public ReadWriteMultipleRegistersImplementation(ILoggerFactory loggerFactory, IDevicePointStorage<ushort> storage)
-        {
-            _loggerFactory = loggerFactory ?? throw new ArgumentNullException(nameof(loggerFactory));
-            _storage = storage ?? throw new ArgumentNullException(nameof(storage));
-        }
+    public Task<ReadWriteMultipleRegistersResponse> ProcessAsync(ReadWriteMultipleRegistersRequest request,
+        CancellationToken cancellationToken)
+    {
+        _storage.WritePoints(request.WriteStartingAddress, request.WriteRegistersValue);
 
-        public Task<ReadWriteMultipleRegistersResponse> ProcessAsync(ReadWriteMultipleRegistersRequest request, CancellationToken cancellationToken)
-        {
-            _storage.WritePoints(request.WriteStartingAddress, request.WriteRegistersValue);
+        var readRegisters = _storage.ReadPoints(request.ReadStartingAddress, request.QuantityToRead);
 
-            var readRegisters = _storage.ReadPoints(request.ReadStartingAddress, request.QuantityToRead);
-
-            return Task.FromResult(new ReadWriteMultipleRegistersResponse(readRegisters));
-        }
+        return Task.FromResult(new ReadWriteMultipleRegistersResponse(readRegisters));
     }
 }

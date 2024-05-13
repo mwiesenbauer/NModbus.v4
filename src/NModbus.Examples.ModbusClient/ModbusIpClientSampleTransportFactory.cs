@@ -18,14 +18,14 @@ internal class ModbusIpClientSampleTransportFactory
 
     public IModbusClientTransport CreateTcpInsecureClient(IPAddress serverAddress)
     {
-        IStreamFactory streamFactory = new TcpStreamFactory(new(serverAddress, ModbusIPPorts.Insecure));
+        IStreamFactory streamFactory = new TcpStreamFactory(new IPEndPoint(serverAddress, ModbusIPPorts.Insecure));
 
         return BuildClientTransport(streamFactory);
     }
 
     public IModbusClientTransport CreateUpdClient(IPAddress serverAddress)
     {
-        IStreamFactory streamFactory = new UdpStreamFactory(new(serverAddress, ModbusIPPorts.Insecure), s =>
+        IStreamFactory streamFactory = new UdpStreamFactory(new IPEndPoint(serverAddress, ModbusIPPorts.Insecure), s =>
         {
             s.Client.ReceiveTimeout = 5000;
             s.Client.SendTimeout = 5000;
@@ -34,18 +34,22 @@ internal class ModbusIpClientSampleTransportFactory
         return BuildClientTransport(streamFactory);
     }
 
-    public async Task<IModbusClientTransport> CreateTcpSecureClient(string serverDnsName, RemoteCertificateValidationCallback certificateValidationCallback)
+    public async Task<IModbusClientTransport> CreateTcpSecureClient(string serverDnsName,
+        RemoteCertificateValidationCallback certificateValidationCallback)
     {
         var options = new SslClientAuthenticationOptions
         {
             TargetHost = serverDnsName,
-            EnabledSslProtocols = System.Security.Authentication.SslProtocols.Tls12 | System.Security.Authentication.SslProtocols.Tls13,
+            EnabledSslProtocols =
+                System.Security.Authentication.SslProtocols.Tls12 |
+                System.Security.Authentication.SslProtocols.Tls13,
             RemoteCertificateValidationCallback = certificateValidationCallback
         };
 
-        IPHostEntry serverAddresses = await Dns.GetHostEntryAsync(serverDnsName);
+        var serverAddresses = await Dns.GetHostEntryAsync(serverDnsName);
 
-        IStreamFactory streamFactory = new TcpStreamFactory(new IPEndPoint(serverAddresses.AddressList[0], ModbusIPPorts.Secure), null, options);
+        IStreamFactory streamFactory =
+            new TcpStreamFactory(new IPEndPoint(serverAddresses.AddressList[0], ModbusIPPorts.Secure), null, options);
 
         return BuildClientTransport(streamFactory);
     }

@@ -3,27 +3,28 @@ using NModbus.BasicServer.Interfaces;
 using NModbus.Interfaces;
 using NModbus.Messages;
 
-namespace NModbus.BasicServer.Functions
+namespace NModbus.BasicServer.Functions;
+
+public class WriteMultipleRegistersImplementation : IModbusFunctionImplementation<WriteMultipleRegistersRequest,
+    WriteMultipleRegistersResponse>
 {
-    public class WriteMultipleRegistersImplementation : IModbusFunctionImplementation<WriteMultipleRegistersRequest, WriteMultipleRegistersResponse>
+    private readonly ILoggerFactory _loggerFactory;
+    private readonly IDevicePointStorage<ushort> _storage;
+
+    public WriteMultipleRegistersImplementation(ILoggerFactory loggerFactory, IDevicePointStorage<ushort> storage)
     {
-        private readonly ILoggerFactory _loggerFactory;
-        private readonly IDevicePointStorage<ushort> _storage;
+        _loggerFactory = loggerFactory ?? throw new ArgumentNullException(nameof(loggerFactory));
+        _storage = storage ?? throw new ArgumentNullException(nameof(storage));
+    }
 
-        public WriteMultipleRegistersImplementation(ILoggerFactory loggerFactory, IDevicePointStorage<ushort> storage)
-        {
-            _loggerFactory = loggerFactory ?? throw new ArgumentNullException(nameof(loggerFactory));
-            _storage = storage ?? throw new ArgumentNullException(nameof(storage));
-        }
+    public Task<WriteMultipleRegistersResponse> ProcessAsync(
+        WriteMultipleRegistersRequest request,
+        CancellationToken cancellationToken = default
+    )
+    {
+        _storage.WritePoints(request.StartingAddress, request.Registers);
 
-        public Task<WriteMultipleRegistersResponse> ProcessAsync(
-            WriteMultipleRegistersRequest request,
-            CancellationToken cancellationToken = default
-        )
-        {
-            _storage.WritePoints(request.StartingAddress, request.Registers);
-
-            return Task.FromResult(new WriteMultipleRegistersResponse(request.StartingAddress, (ushort)request.Registers.Length));
-        }
+        return Task.FromResult(
+            new WriteMultipleRegistersResponse(request.StartingAddress, (ushort)request.Registers.Length));
     }
 }

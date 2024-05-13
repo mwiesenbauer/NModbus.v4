@@ -3,24 +3,26 @@ using NModbus.BasicServer.Interfaces;
 using NModbus.Interfaces;
 using NModbus.Messages;
 
-namespace NModbus.BasicServer.Functions
+namespace NModbus.BasicServer.Functions;
+
+public class ReadCoilsImplementation : IModbusFunctionImplementation<ReadCoilsRequest, ReadCoilsResponse>
 {
-    public class ReadCoilsImplementation : IModbusFunctionImplementation<ReadCoilsRequest, ReadCoilsResponse>
+    private readonly IDevicePointStorage<bool> _storage;
+
+    public ReadCoilsImplementation(ILoggerFactory loggerFactory, IDevicePointStorage<bool> storage)
     {
-        private readonly IDevicePointStorage<bool> _storage;
-
-        public ReadCoilsImplementation(ILoggerFactory loggerFactory, IDevicePointStorage<bool> storage)
+        if (loggerFactory is null)
         {
-            if (loggerFactory is null) throw new ArgumentNullException(nameof(loggerFactory));
-
-            _storage = storage ?? throw new ArgumentNullException(nameof(storage));
+            throw new ArgumentNullException(nameof(loggerFactory));
         }
 
-        public Task<ReadCoilsResponse> ProcessAsync(ReadCoilsRequest request, CancellationToken cancellationToken)
-        {
-            var points = _storage.ReadPoints(request.StartingAddress, request.QuantityOfOutputs);
+        _storage = storage ?? throw new ArgumentNullException(nameof(storage));
+    }
 
-            return Task.FromResult(new ReadCoilsResponse(points));
-        }
+    public Task<ReadCoilsResponse> ProcessAsync(ReadCoilsRequest request, CancellationToken cancellationToken)
+    {
+        var points = _storage.ReadPoints(request.StartingAddress, request.QuantityOfOutputs);
+
+        return Task.FromResult(new ReadCoilsResponse(points));
     }
 }

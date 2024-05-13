@@ -17,7 +17,6 @@ var loggerFactory = LoggerFactory.Create(builder =>
 var serverNetwork = new ModbusServerNetwork(loggerFactory);
 
 #if FALSE
-
 var tcpListener = new TcpListener(IPAddress.Loopback, ModbusTcpPorts.Insecure);
 
 await using var transport = new ModbusTcpServerNetworkTransport(tcpListener, serverNetwork, loggerFactory, options);
@@ -29,7 +28,8 @@ var tcpListener = new TcpListener(IPAddress.Loopback, ModbusIPPorts.Secure);
 var options = new SslServerAuthenticationOptions
 {
     ServerCertificate = X509Certificate.CreateFromCertFile("../../../../../certificates/modbus-test.pfx"),
-    EnabledSslProtocols = System.Security.Authentication.SslProtocols.Tls12 | System.Security.Authentication.SslProtocols.Tls12,
+    EnabledSslProtocols = System.Security.Authentication.SslProtocols.Tls12 |
+                          System.Security.Authentication.SslProtocols.Tls12
 };
 
 await using var transport = new ModbusTcpServerNetworkTransport(tcpListener, serverNetwork, loggerFactory, options);

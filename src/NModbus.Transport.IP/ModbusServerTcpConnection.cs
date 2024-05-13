@@ -3,115 +3,119 @@ using NModbus.Interfaces;
 using System.Net.Security;
 using System.Net.Sockets;
 
-namespace NModbus.Transport.IP
+namespace NModbus.Transport.IP;
+
+/// <summary>
+/// This represents a connection from a client on a server.
+/// </summary>
+internal class ModbusServerTcpConnection : IAsyncDisposable
 {
-    /// <summary>
-    /// This represents a connection from a client on a server.
-    /// </summary>
-    internal class ModbusServerTcpConnection : IAsyncDisposable
+    private readonly TcpClient _tcpClient;
+    private readonly IModbusServerNetwork _serverNetwork;
+    private readonly SslServerAuthenticationOptions _options;
+    private readonly CancellationTokenSource _cancellationTokenSource = new();
+    private Task _listenTask;
+    private readonly ILogger _logger;
+    private readonly int _connectionId;
+
+    private IModbusStream _stream;
+    private static int _connectionIdSource;
+
+    public event EventHandler<TcpConnectionEventArgs> ConnectionClosed;
+
+    internal ModbusServerTcpConnection(
+        TcpClient tcpClient,
+        IModbusServerNetwork serverNetwork,
+        ILoggerFactory loggerFactory,
+        SslServerAuthenticationOptions options)
     {
-        private readonly TcpClient _tcpClient;
-        private readonly IModbusServerNetwork _serverNetwork;
-        private readonly SslServerAuthenticationOptions _options;
-        private readonly CancellationTokenSource _cancellationTokenSource = new();
-        private Task _listenTask;
-        private readonly ILogger _logger;
-        private readonly int _connectionId;
+        _connectionId = Interlocked.Increment(ref _connectionIdSource);
 
-        private IModbusStream _stream;
-        private static int _connectionIdSource;
-
-        public event EventHandler<TcpConnectionEventArgs> ConnectionClosed;
-
-        internal ModbusServerTcpConnection(
-            TcpClient tcpClient,
-            IModbusServerNetwork serverNetwork,
-            ILoggerFactory loggerFactory,
-            SslServerAuthenticationOptions options)
+        if (loggerFactory is null)
         {
-            _connectionId = Interlocked.Increment(ref _connectionIdSource);
-
-            if (loggerFactory is null)
-                throw new ArgumentNullException(nameof(loggerFactory));
-
-            _logger = loggerFactory.CreateLogger<ModbusServerTcpConnection>();
-            _tcpClient = tcpClient ?? throw new ArgumentNullException(nameof(tcpClient));
-            _serverNetwork = serverNetwork ?? throw new ArgumentNullException(nameof(serverNetwork));
-            _options = options;
+            throw new ArgumentNullException(nameof(loggerFactory));
         }
 
-        /// <summary>
-        /// Initializes the connection.
-        /// </summary>
-        /// <param name="cancellationToken"></param>
-        /// <returns></returns>
-        /// <remarks>This is broken out because we can't do async in the constructor, and we want to report errors back to the caller.</remarks>
-        internal async Task InitializeAsync(CancellationToken cancellationToken)
+        _logger = loggerFactory.CreateLogger<ModbusServerTcpConnection>();
+        _tcpClient = tcpClient ?? throw new ArgumentNullException(nameof(tcpClient));
+        _serverNetwork = serverNetwork ?? throw new ArgumentNullException(nameof(serverNetwork));
+        _options = options;
+    }
+
+    /// <summary>
+    /// Initializes the connection.
+    /// </summary>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
+    /// <remarks>This is broken out because we can't do async in the constructor, and we want to report errors back to the caller.</remarks>
+    internal async Task InitializeAsync(CancellationToken cancellationToken)
+    {
+        var localStream = _tcpClient.GetStream();
+
+        if (_options == null)
         {
-            var localStream = _tcpClient.GetStream();
+            _stream = new ModbusStream(localStream);
+        }
+        else
+        {
+            var sslStream = new SslStream(localStream, false);
 
-            if (_options == null)
-            {
-                _stream = new ModbusStream(localStream);
-            }
-            else
-            {
-                var sslStream = new SslStream(localStream, false);
+            await sslStream.AuthenticateAsServerAsync(_options, cancellationToken);
 
-                await sslStream.AuthenticateAsServerAsync(_options, cancellationToken);
-
-                _stream = new ModbusStream(sslStream);
-            }
-
-            _listenTask = Task.Run(() => ListenAsync(_cancellationTokenSource.Token), cancellationToken);
+            _stream = new ModbusStream(sslStream);
         }
 
-        private async Task ListenAsync(CancellationToken cancellationToken)
+        _listenTask = Task.Run(() => ListenAsync(_cancellationTokenSource.Token), cancellationToken);
+    }
+
+    private async Task ListenAsync(CancellationToken cancellationToken)
+    {
+        try
         {
-            try
+            if (_stream == null)
             {
+                throw new InvalidOperationException("You must call " + nameof(InitializeAsync) + " first.");
+            }
 
-                if (_stream == null)
-                    throw new InvalidOperationException("You must call " + nameof(InitializeAsync) + " first.");
+            while (!cancellationToken.IsCancellationRequested)
+            {
+                var requestMessage = await _stream.ReadIpMessageAsync(cancellationToken);
 
-                while (!cancellationToken.IsCancellationRequested)
+                if (requestMessage == null)
                 {
-                    var requestMessage = await _stream.ReadIpMessageAsync(cancellationToken);
+                    _logger.LogInformation("{ConnectionId} closed after receiving 0 bytes.", _connectionId);
+                    OnConnectionClosed();
+                    return;
+                }
 
-                    if (requestMessage == null)
-                    {
-                        _logger.LogInformation("{ConnectionId} closed after receiving 0 bytes.", _connectionId);
-                        OnConnectionClosed();
-                        return;
-                    }
+                _logger.LogInformation(
+                    "{ConnectionId} ModbusServerTcpConnection received ADU for unit {UnitIdentifier} with PDU FunctionCode {FunctionCode}.",
+                    _connectionId,
+                    requestMessage.UnitIdentifier,
+                    requestMessage.ProtocolDataUnit.FunctionCode);
 
-                    _logger.LogInformation("{ConnectionId} ModbusServerTcpConnection received ADU for unit {UnitIdentifier} with PDU FunctionCode {FunctionCode}.",
-                        _connectionId,
-                        requestMessage.UnitIdentifier,
-                        requestMessage.ProtocolDataUnit.FunctionCode);
-
-                    await using (var backchannelTransport = new BackchannelTcpClientTransport(_stream, requestMessage.Header.TransactionIdentifier))
-                    {
-                        await _serverNetwork.ProcessRequestAsync(requestMessage, backchannelTransport, cancellationToken);
-                    }
+                await using (var backchannelTransport =
+                             new BackchannelTcpClientTransport(_stream, requestMessage.Header.TransactionIdentifier))
+                {
+                    await _serverNetwork.ProcessRequestAsync(requestMessage, backchannelTransport, cancellationToken);
                 }
             }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Error occured in ListenAsync.");
-            }
         }
-
-        protected void OnConnectionClosed()
+        catch (Exception ex)
         {
-            ConnectionClosed?.Invoke(this, new TcpConnectionEventArgs(_tcpClient.Client.RemoteEndPoint.ToString()));
+            _logger.LogError(ex, "Error occured in ListenAsync.");
         }
+    }
 
-        public async ValueTask DisposeAsync()
-        {
-            _cancellationTokenSource.Dispose();
+    protected void OnConnectionClosed()
+    {
+        ConnectionClosed?.Invoke(this, new TcpConnectionEventArgs(_tcpClient.Client.RemoteEndPoint.ToString()));
+    }
 
-            await _listenTask;
-        }
+    public async ValueTask DisposeAsync()
+    {
+        _cancellationTokenSource.Dispose();
+
+        await _listenTask;
     }
 }

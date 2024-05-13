@@ -2,8 +2,9 @@ using Microsoft.Extensions.Logging;
 using NModbus;
 using NModbus.Examples.ModbusClient;
 using System.Net;
+using NModbus.Extensions;
 
-ILoggerFactory loggerFactory = LoggerFactory.Create(builder =>
+var loggerFactory = LoggerFactory.Create(builder =>
 {
     builder
         .SetMinimumLevel(LogLevel.Debug)
@@ -17,7 +18,7 @@ const byte unitIdentifier = 1;
 
 var sampleFactory = new ModbusIpClientSampleTransportFactory(loggerFactory);
 
-string sample = "insecure";
+var sample = "insecure";
 
 await using var transport = sample switch
 {
@@ -41,7 +42,8 @@ await modbusClient.WriteSingleRegisterAsync(unitIdentifier, 0, 44);
 {
     var holdingRegisters = await modbusClient.ReadHoldingRegistersAsync(unitIdentifier, 0, 5);
 
-    logger.LogInformation("Read Holding Registers: {Registers}", string.Join(", ", holdingRegisters.Select(r => r.ToString())));
+    logger.LogInformation("Read Holding Registers: {Registers}",
+        string.Join(", ", holdingRegisters.Select(r => r.ToString())));
 }
 
 logger.LogInformation("Write multiple registers..");
@@ -51,10 +53,9 @@ await modbusClient.WriteMultipleRegistersAsync(unitIdentifier, 0, new ushort[] {
 {
     var holdingRegisters = await modbusClient.ReadHoldingRegistersAsync(unitIdentifier, 0, 5);
 
-    logger.LogInformation("Read Holding Registers: {Registers}", string.Join(", ", holdingRegisters.Select(r => r.ToString())));
+    logger.LogInformation("Read Holding Registers: {Registers}",
+        string.Join(", ", holdingRegisters.Select(r => r.ToString())));
 }
 
 Console.WriteLine("Press any key to exit...");
 Console.ReadKey();
-
-
