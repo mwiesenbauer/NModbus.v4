@@ -10,7 +10,7 @@ namespace NModbus
     public static class ModbusClientExtensions
     {
         /// <summary>
-        /// Throws an exception of the specified function isn't available.
+        /// Throws an exception if the specified function isn't available.
         /// </summary>
         /// <typeparam name="TRequest"></typeparam>
         /// <typeparam name="TResponse"></typeparam>
