@@ -24,7 +24,7 @@ namespace NModbus
         /// </summary>
         public byte UnitIdentifier { get; }
 
-        public async virtual Task<ProtocolDataUnit> ProcessRequestAsync(ProtocolDataUnit request, CancellationToken cancellationToken)
+        public virtual async Task<ProtocolDataUnit> ProcessRequestAsync(ProtocolDataUnit request, CancellationToken cancellationToken)
         {
             //Try to find the function for this request
             if (!_serverFunctions.TryGetValue(request.FunctionCode, out var serverFunction))
