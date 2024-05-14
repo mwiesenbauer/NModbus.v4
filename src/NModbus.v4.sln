@@ -1,4 +1,4 @@
-﻿
+
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.3.32804.467
@@ -26,6 +26,8 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NModbus.Transport.IP.Tests", "NModbus.Transport.IP.Tests\NModbus.Transport.IP.Tests.csproj", "{81367A82-7022-4D21-9C81-A05F1688915F}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NModbus.Transport.Serial", "NModbus.Transport.Serial\NModbus.Transport.Serial.csproj", "{3B454DEA-B1F7-463F-99A5-FE66204AA12E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NModbus.Transport.Serial.Tests", "NModbus.Transport.Serial.Tests\NModbus.Transport.Serial.Tests.csproj", "{FD35D005-311D-4485-A955-983C2BF03051}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -73,6 +75,10 @@ Global
 		{3B454DEA-B1F7-463F-99A5-FE66204AA12E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3B454DEA-B1F7-463F-99A5-FE66204AA12E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3B454DEA-B1F7-463F-99A5-FE66204AA12E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FD35D005-311D-4485-A955-983C2BF03051}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FD35D005-311D-4485-A955-983C2BF03051}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FD35D005-311D-4485-A955-983C2BF03051}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FD35D005-311D-4485-A955-983C2BF03051}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
