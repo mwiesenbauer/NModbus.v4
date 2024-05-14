@@ -20,9 +20,9 @@ public class ModbusServerNetwork : IModbusServerNetwork
         return _servers.TryAdd(server.UnitIdentifier, server);
     }
 
-    public bool TryRemoveServer(byte unitNumnber)
+    public bool TryRemoveServer(byte unitIdentifier)
     {
-        return _servers.TryRemove(unitNumnber, out _);
+        return _servers.TryRemove(unitIdentifier, out _);
     }
 
     public async Task ProcessRequestAsync(
