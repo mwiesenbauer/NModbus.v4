@@ -12,7 +12,6 @@ public class ClientServer : IAsyncDisposable
     private const int PORT = 5502;
     private readonly ModbusTcpServerNetworkTransport _serverTransport;
     private readonly IModbusClientTransport _clientTransport;
-    private readonly IModbusServerNetwork _serverNetwork;
 
     public ClientServer(byte unitIdentifier, ILoggerFactory loggerFactory)
     {
@@ -24,20 +23,20 @@ public class ClientServer : IAsyncDisposable
         UnitIdentifier = unitIdentifier;
 
         //Create the server
-        _serverNetwork = new ModbusServerNetwork(loggerFactory);
+        var serverNetwork = new ModbusServerNetwork(loggerFactory);
 
         var serverFunctions = ServerFunctionFactory.CreateBasicServerFunctions(Storage, loggerFactory);
 
         var server = new ModbusServer(UnitIdentifier, serverFunctions, loggerFactory);
 
-        if (!_serverNetwork.TryAddServer(server))
+        if (!serverNetwork.TryAddServer(server))
         {
             throw new InvalidOperationException($"Unable to add server with unit number {server.UnitIdentifier}");
         }
 
         var tcpListener = new TcpListener(IPAddress.Loopback, PORT);
 
-        _serverTransport = new ModbusTcpServerNetworkTransport(tcpListener, _serverNetwork, loggerFactory);
+        _serverTransport = new ModbusTcpServerNetworkTransport(tcpListener, serverNetwork, loggerFactory);
 
         var tcpClientFactory = new TcpStreamFactory(new IPEndPoint(IPAddress.Loopback, PORT));
 
