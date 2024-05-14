@@ -52,7 +52,7 @@ namespace NModbus
             {
                 Logger.LogError(exception, "An error occurred while processing function 0x{FunctionCode:X2}", request.FunctionCode);
 
-                //We're not sure what happened here, so just return a catastrohpic error.
+                //We're not sure what happened here, so just return a catastrophic error.
                 return ProtocolDataUnitFactory.CreateException(request.FunctionCode, ModbusExceptionCode.ServerDeviceFailure);
             }
         }
