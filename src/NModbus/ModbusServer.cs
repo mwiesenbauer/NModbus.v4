@@ -7,7 +7,7 @@ namespace NModbus;
 public class ModbusServer : IModbusServer
 {
     private readonly Dictionary<byte, IServerFunction> _serverFunctions;
-    protected readonly ILogger<ModbusServer> Logger;
+    private readonly ILogger<ModbusServer> _logger;
 
     public ModbusServer(
         byte unitIdentifier,
@@ -16,7 +16,7 @@ public class ModbusServer : IModbusServer
     {
         _serverFunctions = serverFunctions.ToDictionary(f => f.FunctionCode);
         UnitIdentifier = unitIdentifier;
-        Logger = loggerFactory.CreateLogger<ModbusServer>();
+        _logger = loggerFactory.CreateLogger<ModbusServer>();
     }
 
     /// <summary>
@@ -43,14 +43,14 @@ public class ModbusServer : IModbusServer
         }
         catch (ModbusServerException exception)
         {
-            Logger.LogError(exception, "A Modbus error {ExceptionCode} occurred while processing function 0x{FunctionCode:X2}", exception.ExceptionCode, request.FunctionCode);
+            _logger.LogError(exception, "A Modbus error {ExceptionCode} occurred while processing function 0x{FunctionCode:X2}", exception.ExceptionCode, request.FunctionCode);
 
             //Create a message that passes on the exception code that was specified in the exception.
             return ProtocolDataUnitFactory.CreateException(request.FunctionCode, exception.ExceptionCode);
         }
         catch (Exception exception)
         {
-            Logger.LogError(exception, "An error occurred while processing function 0x{FunctionCode:X2}", request.FunctionCode);
+            _logger.LogError(exception, "An error occurred while processing function 0x{FunctionCode:X2}", request.FunctionCode);
 
             //We're not sure what happened here, so just return a catastrophic error.
             return ProtocolDataUnitFactory.CreateException(request.FunctionCode, ModbusExceptionCode.ServerDeviceFailure);
