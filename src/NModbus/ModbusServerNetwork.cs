@@ -9,12 +9,10 @@ public class ModbusServerNetwork : IModbusServerNetwork
 {
     private readonly ConcurrentDictionary<byte, IModbusServer> _servers = new();
     private readonly ILogger _logger;
-    private readonly ILoggerFactory _loggerFactory;
 
-    public ModbusServerNetwork(ILoggerFactory loggerFactory)
+    public ModbusServerNetwork(ILogger logger)
     {
-        _loggerFactory = loggerFactory ?? throw new ArgumentNullException(nameof(loggerFactory));
-        _logger = loggerFactory.CreateLogger<ModbusServerNetwork>();
+        _logger = logger;
     }
 
     public bool TryAddServer(IModbusServer server)

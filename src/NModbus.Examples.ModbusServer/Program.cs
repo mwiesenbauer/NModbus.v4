@@ -14,7 +14,7 @@ var loggerFactory = LoggerFactory.Create(builder =>
         .AddConsole();
 });
 
-var serverNetwork = new ModbusServerNetwork(loggerFactory);
+var serverNetwork = new ModbusServerNetwork(loggerFactory.CreateLogger<ModbusServerNetwork>());
 
 #if FALSE
 var tcpListener = new TcpListener(IPAddress.Loopback, ModbusTcpPorts.Insecure);

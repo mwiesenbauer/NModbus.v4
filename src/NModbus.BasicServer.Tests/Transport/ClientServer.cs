@@ -23,7 +23,7 @@ public class ClientServer : IAsyncDisposable
         UnitIdentifier = unitIdentifier;
 
         //Create the server
-        var serverNetwork = new ModbusServerNetwork(loggerFactory);
+        var serverNetwork = new ModbusServerNetwork(loggerFactory.CreateLogger<ModbusServerNetwork>());
 
         var serverFunctions = ServerFunctionFactory.CreateBasicServerFunctions(Storage, loggerFactory);
 
