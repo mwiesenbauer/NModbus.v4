@@ -69,5 +69,6 @@ public class EndianReader : IDisposable
     public void Dispose()
     {
         _stream.Dispose();
+        GC.SuppressFinalize(this);
     }
 }
