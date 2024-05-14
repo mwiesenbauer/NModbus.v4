@@ -24,7 +24,7 @@ public abstract class ModbusIPClientTransportBase : IModbusClientTransport
         return transactionIdentifier;
     }
 
-    public abstract Task<IModbusDataUnit> SendAndReceiveAsync(IModbusDataUnit message,
+    public abstract Task<IModbusDataUnit?> SendAndReceiveAsync(IModbusDataUnit message,
         CancellationToken cancellationToken = default);
 
     public abstract Task SendAsync(IModbusDataUnit message, CancellationToken cancellationToken = default);

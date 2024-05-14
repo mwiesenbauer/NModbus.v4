@@ -20,7 +20,7 @@ public class ModbusIPClientTransport : ModbusIPClientTransportBase
         _connectionStrategy = connectionStrategy ?? throw new ArgumentNullException(nameof(connectionStrategy));
     }
 
-    public override async Task<IModbusDataUnit> SendAndReceiveAsync(IModbusDataUnit message,
+    public override async Task<IModbusDataUnit?> SendAndReceiveAsync(IModbusDataUnit message,
         CancellationToken cancellationToken = default)
     {
         await using var streamContainer = await _connectionStrategy.GetStreamContainer(cancellationToken)
@@ -32,7 +32,7 @@ public class ModbusIPClientTransport : ModbusIPClientTransportBase
 
         var receivedMessage = await streamContainer.Stream.ReadIpMessageAsync(cancellationToken);
 
-        if (receivedMessage.Header.TransactionIdentifier != transactionIdentifier)
+        if (receivedMessage is null || receivedMessage.Header.TransactionIdentifier != transactionIdentifier)
         {
             throw new InvalidOperationException($"TransactionIdentifier {transactionIdentifier}");
         }

@@ -16,7 +16,7 @@ internal class BackchannelTcpClientTransport : IModbusClientTransport
         _transactionIdentifier = transactionIdentifier;
     }
 
-    public Task<IModbusDataUnit> SendAndReceiveAsync(IModbusDataUnit message,
+    public Task<IModbusDataUnit?> SendAndReceiveAsync(IModbusDataUnit message,
         CancellationToken cancellationToken = default)
     {
         throw new NotSupportedException(

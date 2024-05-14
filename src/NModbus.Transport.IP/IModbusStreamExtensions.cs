@@ -6,7 +6,7 @@ namespace NModbus.Transport.IP;
 
 public static class ModbusStreamExtensions
 {
-    public static async Task<ModbusIPMessage> ReadIpMessageAsync(
+    public static async Task<ModbusIPMessage?> ReadIpMessageAsync(
         this IModbusStream stream,
         CancellationToken cancellationToken = default)
     {
