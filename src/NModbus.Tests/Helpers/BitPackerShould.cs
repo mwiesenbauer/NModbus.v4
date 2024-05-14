@@ -5,7 +5,7 @@ namespace NModbus.Tests.Helpers;
 public class BitPackerShould
 {
     [Fact]
-    public void Unpack_ShouldWork()
+    public void UnpackShouldWork()
     {
         var bytes = new byte[] { 0xcd, 0x6b, 0x05 };
 
@@ -19,7 +19,7 @@ public class BitPackerShould
     }
 
     [Fact]
-    public void Pack_ShouldWork()
+    public void PackShouldWork()
     {
         var bits = "10110011 11010110 101".Replace(" ", "")
             .Select(c => c == '1')
