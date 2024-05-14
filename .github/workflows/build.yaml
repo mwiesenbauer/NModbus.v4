@@ -1,26 +1,31 @@
-name: PR build
+name: build
 
 # https://futurestud.io/tutorials/github-actions-run-on-pull-request
 
-on: [pull_request]
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
 
 jobs:
   build:
     runs-on: ubuntu-latest
     timeout-minutes: 15
-    container: mcr.microsoft.com/dotnet/sdk:7.0
+    container: mcr.microsoft.com/dotnet/sdk:8.0
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Install dependencies
         run: dotnet restore ./src/
       - name: Build
         run: dotnet build --configuration Release --no-restore ./src/
       - name: Setup dotnet
-        uses: actions/setup-dotnet@v3
+        uses: actions/setup-dotnet@v4
         with:
           dotnet-version: | 
             6.0.x
             7.0.x
+            8.0.x
       - name: Test
         run: dotnet test --no-restore --verbosity normal --collect:"XPlat Code Coverage" --results-directory ./coverage ./src/ 
       # - name: Code Coverage Report
