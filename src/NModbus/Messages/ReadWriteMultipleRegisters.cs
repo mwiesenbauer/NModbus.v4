@@ -28,7 +28,13 @@ public class ReadWriteMultipleRegistersMessageSerializer : ModbusMessageSerializ
         var writeStartingAddress = reader.ReadUInt16();
         var quantityToWrite = reader.ReadUInt16();
         var writeByteCount = reader.ReadByte();
-        var writeRegistersValue = reader.ReadUInt16Array(writeByteCount / 2);
+
+        if (writeByteCount * 2 != quantityToWrite)
+        {
+            throw new InvalidDataException("byte count does not match expected value based on quantity of registers");
+        }
+
+        var writeRegistersValue = reader.ReadUInt16Array(quantityToWrite);
 
         return new ReadWriteMultipleRegistersRequest(readStartingAddress, quantityToRead, writeStartingAddress,
             writeRegistersValue);

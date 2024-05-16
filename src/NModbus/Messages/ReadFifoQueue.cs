@@ -27,6 +27,11 @@ public class ReadFifoQueueMessageSerializer : ModbusMessageSerializer<ReadFifoQu
     {
         var byteCount = reader.ReadUInt16();
         var fifoCount = reader.ReadUInt16();
+        if (byteCount != 2 * fifoCount)
+        {
+            throw new InvalidDataException("byte count does not match expected value based on quantity of registers");
+        }
+
         var fifoValueRegister = reader.ReadUInt16Array(fifoCount);
 
         return new ReadFifoQueueResponse(fifoValueRegister);
