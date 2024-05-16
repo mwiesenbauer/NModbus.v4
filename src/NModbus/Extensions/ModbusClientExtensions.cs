@@ -62,6 +62,10 @@ public static class ModbusClientExtensions
 
         //Send the request and wait for a response.
         var responseMessage = await client.Transport.SendAndReceiveAsync(requestMessage, cancellationToken);
+        if (responseMessage is null)
+        {
+            return default;
+        }
 
         //Check to see if this is an error response
         if (ModbusFunctionCodes.IsErrorBitSet(responseMessage.ProtocolDataUnit.FunctionCode))
