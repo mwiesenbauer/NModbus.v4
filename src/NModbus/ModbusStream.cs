@@ -1,5 +1,4 @@
 using NModbus.Interfaces;
-using System.Diagnostics.CodeAnalysis;
 
 namespace NModbus;
 
