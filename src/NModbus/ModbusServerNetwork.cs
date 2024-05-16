@@ -34,7 +34,7 @@ public class ModbusServerNetwork : IModbusServerNetwork
         {
             foreach (var server in _servers.Values)
             {
-                await server.ProcessRequestAsync(requestMessage.ProtocolDataUnit, cancellationToken);
+                _ = await server.ProcessRequestAsync(requestMessage.ProtocolDataUnit, cancellationToken);
             }
         }
         else
@@ -42,12 +42,8 @@ public class ModbusServerNetwork : IModbusServerNetwork
             if (_servers.TryGetValue(requestMessage.UnitIdentifier, out var server))
             {
                 var response = await server.ProcessRequestAsync(requestMessage.ProtocolDataUnit, cancellationToken);
-
-                if (response != null)
-                {
-                    await clientTransport.SendAsync(new ModbusDataUnit(requestMessage.UnitIdentifier, response),
-                        cancellationToken);
-                }
+                await clientTransport.SendAsync(new ModbusDataUnit(requestMessage.UnitIdentifier, response),
+                    cancellationToken);
             }
             else
             {
