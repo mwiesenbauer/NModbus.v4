@@ -7,9 +7,9 @@ namespace NModbus.Transport.IP;
 public class UdpStreamFactory : IStreamFactory
 {
     private readonly IPEndPoint _endPoint;
-    private readonly Action<UdpClient> _configure;
+    private readonly Action<UdpClient>? _configure;
 
-    public UdpStreamFactory(IPEndPoint endPoint, Action<UdpClient> configure = null)
+    public UdpStreamFactory(IPEndPoint endPoint, Action<UdpClient>? configure = null)
     {
         _endPoint = endPoint ?? throw new ArgumentNullException(nameof(endPoint));
         _configure = configure;
