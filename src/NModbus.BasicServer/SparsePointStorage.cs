@@ -26,10 +26,10 @@ public class SparsePointStorage<T> : IPointStorage<T>
         set => _values[address] = value;
     }
 
-    public event EventHandler<DeviceReadArgs> BeforeDeviceRead;
-    public event EventHandler<DeviceReadArgs> AfterDeviceRead;
-    public event EventHandler<DeviceWriteArgs<T>> BeforeDeviceWrite;
-    public event EventHandler<DeviceWriteArgs<T>> AfterDeviceWrite;
+    public event EventHandler<DeviceReadArgs>? BeforeDeviceRead;
+    public event EventHandler<DeviceReadArgs>? AfterDeviceRead;
+    public event EventHandler<DeviceWriteArgs<T>>? BeforeDeviceWrite;
+    public event EventHandler<DeviceWriteArgs<T>>? AfterDeviceWrite;
 
     private void VerifyPointsAreInRange(ushort startingAddress, ushort numberOfPoints)
     {
