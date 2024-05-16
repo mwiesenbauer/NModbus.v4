@@ -26,7 +26,10 @@ public class
         var quantityOfRegisters = reader.ReadUInt16();
         var byteCount = reader.ReadByte();
 
-        //TODO: Reconcile quantityOfRegisters with byteCount
+        if (byteCount != 2 * quantityOfRegisters)
+        {
+            throw new InvalidDataException("byte count does not match expected value based on quantity of registers");
+        }
 
         var registers = reader.ReadUInt16Array(quantityOfRegisters);
 
