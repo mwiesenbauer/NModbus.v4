@@ -51,7 +51,10 @@ public class SparsePointStorage<T> : IPointStorage<T>
 
         for (var index = 0; index < numberOfPoints; index++)
         {
-            _values.TryGetValue((ushort)(startingAddress + index), out var value);
+            if (!_values.TryGetValue((ushort)(startingAddress + index), out var value))
+            {
+                continue;
+            }
 
             points[index] = value;
         }
