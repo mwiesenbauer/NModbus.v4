@@ -21,13 +21,13 @@ public static class ModbusClientExtensions
         this IModbusClient client,
         byte functionCode)
     {
-        if (!client.TryGetClientFunction<TRequest, TResponse>(functionCode, out var clientFunction))
+        var found = client.TryGetClientFunction<TRequest, TResponse>(functionCode, out var clientFunction);
+        return found switch
         {
-            throw new KeyNotFoundException(
-                $"Unable to find an {nameof(IClientFunction)}<{typeof(TRequest).Name},{typeof(TResponse).Name}> with function code 0x{functionCode:X2}");
-        }
-
-        return clientFunction;
+            true => clientFunction,
+            _ => throw new KeyNotFoundException(
+                $"Unable to find an {nameof(IClientFunction)}<{typeof(TRequest).Name},{typeof(TResponse).Name}> with function code 0x{functionCode:X2}")
+        };
     }
 
     public static async Task<TResponse> ExecuteAsync<TRequest, TResponse>(
