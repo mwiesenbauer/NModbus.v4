@@ -20,12 +20,11 @@ public class EndianReader : IDisposable
 
         var numberRead = _stream.Read(buffer, 0, 1);
 
-        if (numberRead != 1)
+        return numberRead switch
         {
-            throw new InvalidOperationException($"Expected 1 bytes but got {numberRead} instead.");
-        }
-
-        return buffer[0];
+            1 => buffer[0],
+            _ => throw new InvalidOperationException($"Expected 1 bytes but got {numberRead} instead.")
+        };
     }
 
     public ushort ReadUInt16()
