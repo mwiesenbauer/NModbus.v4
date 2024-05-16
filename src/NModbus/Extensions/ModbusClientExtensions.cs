@@ -127,16 +127,17 @@ public static class ModbusClientExtensions
         return response.RegisterValues;
     }
 
-    public static async Task WriteSingleRegisterAsync(this IModbusClient client, byte unitIdentifier,
+    public static Task WriteSingleRegisterAsync(this IModbusClient client, byte unitIdentifier,
         ushort startingAddress, ushort value, CancellationToken cancellationToken = default)
     {
         var request = new WriteSingleRegisterRequest(startingAddress, value);
 
-        await client.ExecuteAsync<WriteSingleRegisterRequest, WriteSingleRegisterResponse>(
+        return client.ExecuteAsync<WriteSingleRegisterRequest, WriteSingleRegisterResponse>(
             ModbusFunctionCodes.WRITE_SINGLE_REGISTER,
             unitIdentifier,
             request,
-            cancellationToken);
+            cancellationToken
+        );
     }
 
     public static async Task<ushort[]> ReadInputRegistersAsync(this IModbusClient client, byte unitIdentifier,
@@ -153,19 +154,20 @@ public static class ModbusClientExtensions
         return response.InputRegisters;
     }
 
-    public static async Task WriteSingleCoilAsync(this IModbusClient client, byte unitIdentifier, ushort outputAddress,
+    public static Task WriteSingleCoilAsync(this IModbusClient client, byte unitIdentifier, ushort outputAddress,
         bool value, CancellationToken cancellationToken = default)
     {
         var request = new WriteSingleCoilRequest(outputAddress, value);
 
-        await client.ExecuteAsync<WriteSingleCoilRequest, WriteSingleCoilResponse>(
+        return client.ExecuteAsync<WriteSingleCoilRequest, WriteSingleCoilResponse>(
             ModbusFunctionCodes.WRITE_SINGLE_COIL,
             unitIdentifier,
             request,
-            cancellationToken);
+            cancellationToken
+        );
     }
 
-    public static async Task WriteMultipleCoils(
+    public static Task WriteMultipleCoils(
         this IModbusClient client,
         byte unitIdentifier,
         ushort startingAddress,
@@ -174,29 +176,31 @@ public static class ModbusClientExtensions
     {
         var request = new WriteMultipleCoilsRequest(startingAddress, outputsValue);
 
-        await client.ExecuteAsync<WriteMultipleCoilsRequest, WriteMultipleCoilsResponse>(
+        return client.ExecuteAsync<WriteMultipleCoilsRequest, WriteMultipleCoilsResponse>(
             ModbusFunctionCodes.WRITE_MULTIPLE_COILS,
             unitIdentifier,
             request,
-            cancellationToken);
+            cancellationToken
+        );
     }
 
-    public static async Task WriteMultipleRegistersAsync(this IModbusClient client, byte unitIdentifier,
+    public static Task WriteMultipleRegistersAsync(this IModbusClient client, byte unitIdentifier,
         ushort startingAddress, ushort[] registers, CancellationToken cancellationToken = default)
     {
         var request = new WriteMultipleRegistersRequest(startingAddress, registers);
 
-        await client.ExecuteAsync<WriteMultipleRegistersRequest, WriteMultipleRegistersResponse>(
+        return client.ExecuteAsync<WriteMultipleRegistersRequest, WriteMultipleRegistersResponse>(
             ModbusFunctionCodes.WRITE_MULTIPLE_REGISTERS,
             unitIdentifier,
             request,
-            cancellationToken);
+            cancellationToken
+        );
     }
 
     //TODO: ReadFileRecord
     //TODO: WriteFileRecord
 
-    public static async Task MaskWriteRegisterAsync(
+    public static Task MaskWriteRegisterAsync(
         this IModbusClient client,
         byte unitIdentifier,
         ushort referenceAddress,
@@ -206,11 +210,12 @@ public static class ModbusClientExtensions
     {
         var request = new MaskWriteRegisterRequest(referenceAddress, andMask, orMask);
 
-        await client.ExecuteAsync<MaskWriteRegisterRequest, MaskWriteRegisterResponse>(
+        return client.ExecuteAsync<MaskWriteRegisterRequest, MaskWriteRegisterResponse>(
             ModbusFunctionCodes.MASK_WRITE_REGISTER,
             unitIdentifier,
             request,
-            cancellationToken);
+            cancellationToken
+        );
     }
 
     public static async Task<ushort[]> ReadWriteMultipleRegisters(
