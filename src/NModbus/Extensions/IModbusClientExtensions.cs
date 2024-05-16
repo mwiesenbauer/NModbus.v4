@@ -78,7 +78,7 @@ public static class ModbusClientExtensions
         var request = new ReadCoilsRequest(startingAddress, quantityOfOutputs);
 
         var response = await client.ExecuteAsync<ReadCoilsRequest, ReadCoilsResponse>(
-            ModbusFunctionCodes.ReadCoils,
+            ModbusFunctionCodes.READ_COILS,
             unitIdentifier,
             request,
             cancellationToken);
@@ -96,7 +96,7 @@ public static class ModbusClientExtensions
         var request = new ReadDiscreteInputsRequest(startingAddress, quantityOfInputs);
 
         var response = await client.ExecuteAsync<ReadDiscreteInputsRequest, ReadDiscreteInputsResponse>(
-            ModbusFunctionCodes.ReadDiscreteInputs,
+            ModbusFunctionCodes.READ_DISCRETE_INPUTS,
             unitIdentifier,
             request,
             cancellationToken);
@@ -110,7 +110,7 @@ public static class ModbusClientExtensions
         var request = new ReadHoldingRegistersRequest(startingAddress, numberOfRegisters);
 
         var response = await client.ExecuteAsync<ReadHoldingRegistersRequest, ReadHoldingRegistersResponse>(
-            ModbusFunctionCodes.ReadHoldingRegisters,
+            ModbusFunctionCodes.READ_HOLDING_REGISTERS,
             unitIdentifier,
             request,
             cancellationToken);
@@ -124,7 +124,7 @@ public static class ModbusClientExtensions
         var request = new WriteSingleRegisterRequest(startingAddress, value);
 
         await client.ExecuteAsync<WriteSingleRegisterRequest, WriteSingleRegisterResponse>(
-            ModbusFunctionCodes.WriteSingleRegister,
+            ModbusFunctionCodes.WRITE_SINGLE_REGISTER,
             unitIdentifier,
             request,
             cancellationToken);
@@ -136,7 +136,7 @@ public static class ModbusClientExtensions
         var request = new ReadInputRegistersRequest(startingAddress, numberOfRegisters);
 
         var response = await client.ExecuteAsync<ReadInputRegistersRequest, ReadInputRegistersResponse>(
-            ModbusFunctionCodes.ReadInputRegisters,
+            ModbusFunctionCodes.READ_INPUT_REGISTERS,
             unitIdentifier,
             request,
             cancellationToken);
@@ -150,7 +150,7 @@ public static class ModbusClientExtensions
         var request = new WriteSingleCoilRequest(outputAddress, value);
 
         await client.ExecuteAsync<WriteSingleCoilRequest, WriteSingleCoilResponse>(
-            ModbusFunctionCodes.WriteSingleCoil,
+            ModbusFunctionCodes.WRITE_SINGLE_COIL,
             unitIdentifier,
             request,
             cancellationToken);
@@ -166,7 +166,7 @@ public static class ModbusClientExtensions
         var request = new WriteMultipleCoilsRequest(startingAddress, outputsValue);
 
         await client.ExecuteAsync<WriteMultipleCoilsRequest, WriteMultipleCoilsResponse>(
-            ModbusFunctionCodes.WriteMultipleCoils,
+            ModbusFunctionCodes.WRITE_MULTIPLE_COILS,
             unitIdentifier,
             request,
             cancellationToken);
@@ -178,7 +178,7 @@ public static class ModbusClientExtensions
         var request = new WriteMultipleRegistersRequest(startingAddress, registers);
 
         await client.ExecuteAsync<WriteMultipleRegistersRequest, WriteMultipleRegistersResponse>(
-            ModbusFunctionCodes.WriteMultipleRegisters,
+            ModbusFunctionCodes.WRITE_MULTIPLE_REGISTERS,
             unitIdentifier,
             request,
             cancellationToken);
@@ -198,7 +198,7 @@ public static class ModbusClientExtensions
         var request = new MaskWriteRegisterRequest(referenceAddress, andMask, orMask);
 
         await client.ExecuteAsync<MaskWriteRegisterRequest, MaskWriteRegisterResponse>(
-            ModbusFunctionCodes.MaskWriteRegister,
+            ModbusFunctionCodes.MASK_WRITE_REGISTER,
             unitIdentifier,
             request,
             cancellationToken);
@@ -220,7 +220,7 @@ public static class ModbusClientExtensions
             writeRegistersValue);
 
         var response = await client.ExecuteAsync<ReadWriteMultipleRegistersRequest, ReadWriteMultipleRegistersResponse>(
-            ModbusFunctionCodes.ReadWriteMultipleRegisters,
+            ModbusFunctionCodes.READ_WRITE_MULTIPLE_REGISTERS,
             unitIdentifier,
             request,
             cancellationToken);
@@ -237,7 +237,7 @@ public static class ModbusClientExtensions
         var request = new ReadFifoQueueRequest(fifoPointerAddress);
 
         var response = await client.ExecuteAsync<ReadFifoQueueRequest, ReadFifoQueueResponse>(
-            ModbusFunctionCodes.ReadFifoQueue,
+            ModbusFunctionCodes.READ_FIFO_QUEUE,
             unitIdentifier,
             request,
             cancellationToken);

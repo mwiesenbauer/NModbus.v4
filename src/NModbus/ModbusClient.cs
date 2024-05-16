@@ -24,19 +24,19 @@ public class ModbusClient : IModbusClient
 
         var defaultClientFunctions = new IClientFunction[]
         {
-                new ModbusClientFunction<ReadCoilsRequest, ReadCoilsResponse>(ModbusFunctionCodes.ReadCoils, new ReadCoilsMessageSerializer()),
-                new ModbusClientFunction<ReadDiscreteInputsRequest, ReadDiscreteInputsResponse>(ModbusFunctionCodes.ReadDiscreteInputs, new ReadDiscreteInputsMessageSerializer()),
-                new ModbusClientFunction<ReadHoldingRegistersRequest, ReadHoldingRegistersResponse>(ModbusFunctionCodes.ReadHoldingRegisters, new ReadHoldingRegistersMessageSerializer()),
-                new ModbusClientFunction<ReadInputRegistersRequest, ReadInputRegistersResponse>(ModbusFunctionCodes.ReadInputRegisters, new ReadInputRegistersMessageSerializer()),
-                new ModbusClientFunction<WriteSingleCoilRequest, WriteSingleCoilResponse>(ModbusFunctionCodes.WriteSingleCoil, new WriteSingleCoilMessageSerializer()),
-                new ModbusClientFunction<WriteSingleRegisterRequest, WriteSingleRegisterResponse>(ModbusFunctionCodes.WriteSingleRegister, new WriteSingleRegisterMessageSerializer()),
-                new ModbusClientFunction<WriteMultipleCoilsRequest, WriteMultipleCoilsResponse>(ModbusFunctionCodes.WriteMultipleCoils, new WriteMultipleCoilsMessageSerializer()),
-                new ModbusClientFunction<WriteMultipleRegistersRequest, WriteMultipleRegistersResponse>(ModbusFunctionCodes.WriteMultipleRegisters, new WriteMultipleRegistersMessageSerializer()),
-                new ModbusClientFunction<ReadFileRecordRequest, ReadFileRecordResponse>(ModbusFunctionCodes.ReadFileRecord, new ReadFileRecordMessageSerializer()),
-                new ModbusClientFunction<WriteFileRecordRequest, WriteFileRecordResponse>(ModbusFunctionCodes.WriteFileRecord, new WriteFileRecordMessageSerializer()),
-                new ModbusClientFunction<MaskWriteRegisterRequest, MaskWriteRegisterResponse>(ModbusFunctionCodes.MaskWriteRegister, new MaskWriteRegisterMessageSerializer()),
-                new ModbusClientFunction<ReadWriteMultipleRegistersRequest, ReadWriteMultipleRegistersResponse>(ModbusFunctionCodes.ReadWriteMultipleRegisters, new ReadWriteMultipleRegistersMessageSerializer()),
-                new ModbusClientFunction<ReadFifoQueueRequest, ReadFifoQueueResponse>(ModbusFunctionCodes.ReadFifoQueue, new ReadFifoQueueMessageSerializer()),
+                new ModbusClientFunction<ReadCoilsRequest, ReadCoilsResponse>(ModbusFunctionCodes.READ_COILS, new ReadCoilsMessageSerializer()),
+                new ModbusClientFunction<ReadDiscreteInputsRequest, ReadDiscreteInputsResponse>(ModbusFunctionCodes.READ_DISCRETE_INPUTS, new ReadDiscreteInputsMessageSerializer()),
+                new ModbusClientFunction<ReadHoldingRegistersRequest, ReadHoldingRegistersResponse>(ModbusFunctionCodes.READ_HOLDING_REGISTERS, new ReadHoldingRegistersMessageSerializer()),
+                new ModbusClientFunction<ReadInputRegistersRequest, ReadInputRegistersResponse>(ModbusFunctionCodes.READ_INPUT_REGISTERS, new ReadInputRegistersMessageSerializer()),
+                new ModbusClientFunction<WriteSingleCoilRequest, WriteSingleCoilResponse>(ModbusFunctionCodes.WRITE_SINGLE_COIL, new WriteSingleCoilMessageSerializer()),
+                new ModbusClientFunction<WriteSingleRegisterRequest, WriteSingleRegisterResponse>(ModbusFunctionCodes.WRITE_SINGLE_REGISTER, new WriteSingleRegisterMessageSerializer()),
+                new ModbusClientFunction<WriteMultipleCoilsRequest, WriteMultipleCoilsResponse>(ModbusFunctionCodes.WRITE_MULTIPLE_COILS, new WriteMultipleCoilsMessageSerializer()),
+                new ModbusClientFunction<WriteMultipleRegistersRequest, WriteMultipleRegistersResponse>(ModbusFunctionCodes.WRITE_MULTIPLE_REGISTERS, new WriteMultipleRegistersMessageSerializer()),
+                new ModbusClientFunction<ReadFileRecordRequest, ReadFileRecordResponse>(ModbusFunctionCodes.READ_FILE_RECORD, new ReadFileRecordMessageSerializer()),
+                new ModbusClientFunction<WriteFileRecordRequest, WriteFileRecordResponse>(ModbusFunctionCodes.WRITE_FILE_RECORD, new WriteFileRecordMessageSerializer()),
+                new ModbusClientFunction<MaskWriteRegisterRequest, MaskWriteRegisterResponse>(ModbusFunctionCodes.MASK_WRITE_REGISTER, new MaskWriteRegisterMessageSerializer()),
+                new ModbusClientFunction<ReadWriteMultipleRegistersRequest, ReadWriteMultipleRegistersResponse>(ModbusFunctionCodes.READ_WRITE_MULTIPLE_REGISTERS, new ReadWriteMultipleRegistersMessageSerializer()),
+                new ModbusClientFunction<ReadFifoQueueRequest, ReadFifoQueueResponse>(ModbusFunctionCodes.READ_FIFO_QUEUE, new ReadFifoQueueMessageSerializer()),
         };
 
         _clientFunctions = defaultClientFunctions
