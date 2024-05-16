@@ -52,3 +52,16 @@ jobs:
       # build to find out that we can't pack.
       - name: Pack
         run: dotnet pack --configuration Release /p:Version=1.0.0 --output . ./src/
+  dotnet-format:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: ensure format
+        run: |
+          dotnet format whitespace ./src/ --verify-no-changes -v:diag --exclude ~/.nuget
+          dotnet format style ./src/ --verify-no-changes -v:diag --exclude ~/.nuget
