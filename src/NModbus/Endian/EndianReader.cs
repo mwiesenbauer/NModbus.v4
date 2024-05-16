@@ -39,12 +39,12 @@ public class EndianReader : IDisposable
     {
         var buffer = new byte[length];
 
-        if (!_stream.TryReadBuffer(buffer))
+        var success = _stream.TryReadBuffer(buffer);
+        return success switch
         {
-            return null;
-        }
-
-        return buffer;
+            true => buffer,
+            _ => Array.Empty<byte>()
+        };
     }
 
     private byte[] ReadPrimitiveBytes(int count)
