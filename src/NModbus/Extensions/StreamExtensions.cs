@@ -21,7 +21,9 @@ public static class StreamExtensions
             var read = await stream.ReadAsync(buffer, totalRead, buffer.Length - totalRead, cancellationToken);
 
             if (read == 0)
+            {
                 return false;
+            }
 
             totalRead += read;
         }
@@ -38,7 +40,9 @@ public static class StreamExtensions
             var read = stream.Read(buffer, totalRead, buffer.Length - totalRead);
 
             if (read == 0)
+            {
                 return false;
+            }
 
             totalRead += read;
         }
