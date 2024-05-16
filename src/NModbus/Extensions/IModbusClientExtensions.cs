@@ -17,7 +17,8 @@ public static class ModbusClientExtensions
     /// <param name="functionCode"></param>
     /// <returns></returns>
     /// <exception cref="KeyNotFoundException"></exception>
-    public static IClientFunction<TRequest, TResponse> GetClientFunction<TRequest, TResponse>(this IModbusClient client,
+    public static IClientFunction<TRequest, TResponse>? GetClientFunction<TRequest, TResponse>(
+        this IModbusClient client,
         byte functionCode)
     {
         if (!client.TryGetClientFunction<TRequest, TResponse>(functionCode, out var clientFunction))
@@ -38,6 +39,10 @@ public static class ModbusClientExtensions
     {
         //Find the client function.
         var clientFunction = client.GetClientFunction<TRequest, TResponse>(functionCode);
+        if (clientFunction is null)
+        {
+            throw new InvalidOperationException();
+        }
 
         //Serialize the request
         var serializedRequest = clientFunction.MessageSerializer.SerializeRequest(request);

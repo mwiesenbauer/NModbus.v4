@@ -14,7 +14,7 @@ public interface IModbusClient
     /// <param name="clientFunction"></param>
     /// <returns></returns>
     bool TryGetClientFunction<TRequest, TResponse>(byte functionCode,
-        out IClientFunction<TRequest, TResponse> clientFunction);
+        out IClientFunction<TRequest, TResponse>? clientFunction);
 
     IModbusClientTransport Transport { get; }
 }
