@@ -10,10 +10,11 @@ public class Storage : IDeviceStorage
     private readonly IPointStorage<bool> _discreteInputs;
 
     public Storage(
-        IPointStorage<ushort> holdingRegisters = null,
-        IPointStorage<ushort> inputRegisters = null,
-        IPointStorage<bool> coils = null,
-        IPointStorage<bool> discreteInputs = null)
+        IPointStorage<ushort>? holdingRegisters = null,
+        IPointStorage<ushort>? inputRegisters = null,
+        IPointStorage<bool>? coils = null,
+        IPointStorage<bool>? discreteInputs = null
+    )
     {
         _holdingRegisters = holdingRegisters ?? new SparsePointStorage<ushort>();
         _inputRegisters = inputRegisters ?? new SparsePointStorage<ushort>();

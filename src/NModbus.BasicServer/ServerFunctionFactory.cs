@@ -11,12 +11,14 @@ namespace NModbus.BasicServer;
 public static class ServerFunctionFactory
 {
     public static IServerFunction[] CreateBasicServerFunctions(
-        IDeviceStorage storage = null,
-        ILoggerFactory loggerFactory = null,
-        IEnumerable<IServerFunction> customServerFunctions = null)
+        IDeviceStorage? storage = null,
+        ILoggerFactory? loggerFactory = null,
+        IEnumerable<IServerFunction>? customServerFunctions = null
+    )
     {
         loggerFactory ??= new NullLoggerFactory();
         storage ??= new Storage();
+        customServerFunctions ??= new List<IServerFunction>();
 
         //These are the built in function implementations.
         var serverFunctions = new IServerFunction[]
@@ -85,12 +87,9 @@ public static class ServerFunctionFactory
         var dictionary = serverFunctions
             .ToDictionary(f => f.FunctionCode);
 
-        if (customServerFunctions != null)
+        foreach (var customServerFunction in customServerFunctions)
         {
-            foreach (var customServerFunction in customServerFunctions)
-            {
-                dictionary[customServerFunction.FunctionCode] = customServerFunction;
-            }
+            dictionary[customServerFunction.FunctionCode] = customServerFunction;
         }
 
         return dictionary.Values
