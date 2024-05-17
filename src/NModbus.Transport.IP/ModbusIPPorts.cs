@@ -8,10 +8,10 @@ public static class ModbusIPPorts
     /// <summary>
     /// 502: mbap/TCP
     /// </summary>
-    public const int Insecure = 502;
+    public const int INSECURE = 502;
 
     /// <summary>
     /// 802: mbap/TLS/TCP
     /// </summary>
-    public const int Secure = 802;
+    public const int SECURE = 802;
 }

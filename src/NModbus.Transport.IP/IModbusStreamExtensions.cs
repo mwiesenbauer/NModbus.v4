@@ -10,7 +10,7 @@ public static class ModbusStreamExtensions
         this IModbusStream stream,
         CancellationToken cancellationToken = default)
     {
-        var mbapHeaderBuffer = new byte[MbapSerializer.MbapHeaderLength];
+        var mbapHeaderBuffer = new byte[MbapSerializer.MBAP_HEADER_LENGTH];
 
         if (!await stream.TryReadBufferAsync(mbapHeaderBuffer, cancellationToken))
             return null;

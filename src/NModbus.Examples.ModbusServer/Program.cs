@@ -23,7 +23,7 @@ await using var transport = new ModbusTcpServerNetworkTransport(tcpListener, ser
 
 #else
 
-var tcpListener = new TcpListener(IPAddress.Loopback, ModbusIPPorts.Secure);
+var tcpListener = new TcpListener(IPAddress.Loopback, ModbusIPPorts.SECURE);
 
 var options = new SslServerAuthenticationOptions
 {

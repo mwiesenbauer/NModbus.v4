@@ -32,10 +32,10 @@ internal static class ModbusIpMessageSerializer
             throw new ArgumentNullException(nameof(bytes));
         }
 
-        if (bytes.Length < MbapSerializer.MbapHeaderLength)
+        if (bytes.Length < MbapSerializer.MBAP_HEADER_LENGTH)
         {
             throw new InvalidOperationException(
-                $"The length of the buffer specified ({bytes.Length}) was less than the minimum {MbapSerializer.MbapHeaderLength} bytes necessary to store an MBAP header.");
+                $"The length of the buffer specified ({bytes.Length}) was less than the minimum {MbapSerializer.MBAP_HEADER_LENGTH} bytes necessary to store an MBAP header.");
         }
 
         var mbapHeader = MbapSerializer.DeserializeMbapHeader(bytes);
@@ -47,8 +47,8 @@ internal static class ModbusIpMessageSerializer
             throw new InvalidOperationException($"Expected {expectedLength} bytes but there were {bytes.Length}.");
         }
 
-        var pdu = new ProtocolDataUnit(new ArraySegment<byte>(bytes, MbapSerializer.MbapHeaderLength,
-            bytes.Length - MbapSerializer.MbapHeaderLength));
+        var pdu = new ProtocolDataUnit(new ArraySegment<byte>(bytes, MbapSerializer.MBAP_HEADER_LENGTH,
+            bytes.Length - MbapSerializer.MBAP_HEADER_LENGTH));
 
         return new ModbusIPMessage(mbapHeader, pdu);
     }

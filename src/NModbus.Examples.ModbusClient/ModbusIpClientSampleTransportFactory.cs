@@ -18,14 +18,14 @@ internal class ModbusIpClientSampleTransportFactory
 
     public IModbusClientTransport CreateTcpInsecureClient(IPAddress serverAddress)
     {
-        IStreamFactory streamFactory = new TcpStreamFactory(new IPEndPoint(serverAddress, ModbusIPPorts.Insecure));
+        IStreamFactory streamFactory = new TcpStreamFactory(new IPEndPoint(serverAddress, ModbusIPPorts.INSECURE));
 
         return BuildClientTransport(streamFactory);
     }
 
     public IModbusClientTransport CreateUpdClient(IPAddress serverAddress)
     {
-        IStreamFactory streamFactory = new UdpStreamFactory(new IPEndPoint(serverAddress, ModbusIPPorts.Insecure), s =>
+        IStreamFactory streamFactory = new UdpStreamFactory(new IPEndPoint(serverAddress, ModbusIPPorts.INSECURE), s =>
         {
             s.Client.ReceiveTimeout = 5000;
             s.Client.SendTimeout = 5000;
@@ -49,7 +49,7 @@ internal class ModbusIpClientSampleTransportFactory
         var serverAddresses = await Dns.GetHostEntryAsync(serverDnsName);
 
         IStreamFactory streamFactory =
-            new TcpStreamFactory(new IPEndPoint(serverAddresses.AddressList[0], ModbusIPPorts.Secure), null, options);
+            new TcpStreamFactory(new IPEndPoint(serverAddresses.AddressList[0], ModbusIPPorts.SECURE), null, options);
 
         return BuildClientTransport(streamFactory);
     }

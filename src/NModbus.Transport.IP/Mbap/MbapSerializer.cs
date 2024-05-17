@@ -5,12 +5,12 @@ namespace NModbus.Transport.IP.Mbap;
 public static class MbapSerializer
 
 {
-    public const ushort ProtocolIdentifier = 0x0000;
+    public const ushort PROTOCOL_IDENTIFIER = 0x0000;
 
     /// <summary>
     /// The length of a MBAP header.
     /// </summary>
-    public const ushort MbapHeaderLength = 7;
+    public const ushort MBAP_HEADER_LENGTH = 7;
 
     public static byte[] SerializeMbapHeader(
         ushort transactionIdentifier,
@@ -20,7 +20,7 @@ public static class MbapSerializer
         using var writer = new EndianWriter(Endianness.BigEndian);
 
         writer.Write(transactionIdentifier);
-        writer.Write(ProtocolIdentifier);
+        writer.Write(PROTOCOL_IDENTIFIER);
         writer.Write(length);
         writer.Write(unitIdentifier);
 
@@ -30,10 +30,10 @@ public static class MbapSerializer
     public static MbapHeader DeserializeMbapHeader(
         byte[] buffer)
     {
-        if (buffer.Length != MbapHeaderLength)
+        if (buffer.Length != MBAP_HEADER_LENGTH)
         {
             throw new InvalidOperationException(
-                $"Expected a buffer of size {MbapHeaderLength} but was given a buffer with {buffer.Length} elements.");
+                $"Expected a buffer of size {MBAP_HEADER_LENGTH} but was given a buffer with {buffer.Length} elements.");
         }
 
         using var reader = new EndianReader(buffer, Endianness.BigEndian);
