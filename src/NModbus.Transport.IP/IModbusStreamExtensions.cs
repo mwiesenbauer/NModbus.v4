@@ -13,16 +13,20 @@ public static class ModbusStreamExtensions
         var mbapHeaderBuffer = new byte[MbapSerializer.MBAP_HEADER_LENGTH];
 
         if (!await stream.TryReadBufferAsync(mbapHeaderBuffer, cancellationToken))
+        {
             return null;
+        }
 
         var mbapHeader = MbapSerializer.DeserializeMbapHeader(mbapHeaderBuffer);
 
         var pduBuffer = new byte[mbapHeader.Length - 1];
 
-        if (!await stream.TryReadBufferAsync(pduBuffer, cancellationToken))
-            return null;
-
-        return new ModbusIPMessage(mbapHeader, new ProtocolDataUnit(pduBuffer));
+        var success = await stream.TryReadBufferAsync(pduBuffer, cancellationToken);
+        return success switch
+        {
+            true => new ModbusIPMessage(mbapHeader, new ProtocolDataUnit(pduBuffer)),
+            _ => null
+        };
     }
 
     public static async Task WriteIpMessageAsync(
