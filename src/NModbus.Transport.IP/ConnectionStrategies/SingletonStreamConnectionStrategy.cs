@@ -6,15 +6,16 @@ namespace NModbus.Transport.IP.ConnectionStrategies;
 public class SingletonStreamConnectionStrategy : IConnectionStrategy
 {
     private readonly IStreamFactory _tcpClientFactory;
-    private IModbusStream _stream;
+    private IModbusStream? _stream;
 
     public SingletonStreamConnectionStrategy(IStreamFactory streamFactory, ILoggerFactory loggerFactory)
     {
-        _tcpClientFactory = streamFactory ?? throw new ArgumentNullException(nameof(streamFactory));
         if (loggerFactory == null)
         {
             throw new ArgumentNullException(nameof(loggerFactory));
         }
+
+        _tcpClientFactory = streamFactory ?? throw new ArgumentNullException(nameof(streamFactory));
     }
 
     public async Task<IPerRequestStreamContainer> GetStreamContainer(CancellationToken cancellationToken)
