@@ -6,6 +6,7 @@ namespace NModbus.Transport.IP.ConnectionStrategies;
 public class SingletonStreamConnectionStrategy : IConnectionStrategy
 {
     private readonly IStreamFactory _tcpClientFactory;
+    private readonly SemaphoreSlim _semaphore = new(1, 1);
     private IModbusStream? _stream;
 
     public SingletonStreamConnectionStrategy(IStreamFactory streamFactory, ILoggerFactory loggerFactory)
@@ -20,7 +21,9 @@ public class SingletonStreamConnectionStrategy : IConnectionStrategy
 
     public async Task<IPerRequestStreamContainer> GetStreamContainer(CancellationToken cancellationToken)
     {
+        await _semaphore.WaitAsync(cancellationToken);
         _stream ??= await _tcpClientFactory.CreateAndConnectAsync(cancellationToken);
+        _ = _semaphore.Release();
 
         return new SingletonStreamPerRequestContainer(_stream);
     }
