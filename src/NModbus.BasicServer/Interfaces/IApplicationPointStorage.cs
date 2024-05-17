@@ -32,5 +32,5 @@ public interface IApplicationPointStorage<T>
     /// </summary>
     /// <param name="address"></param>
     /// <returns></returns>
-    T this[ushort address] { get; set; }
+    T? this[ushort address] { get; set; }
 }

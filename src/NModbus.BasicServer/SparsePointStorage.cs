@@ -15,15 +15,23 @@ public class SparsePointStorage<T> : IPointStorage<T>
 {
     private readonly Dictionary<ushort, T> _values = new();
 
-    public T this[ushort address]
+    public T? this[ushort address]
     {
         get
         {
-            _values.TryGetValue(address, out var value);
+            _ = _values.TryGetValue(address, out var value);
 
             return value;
         }
-        set => _values[address] = value;
+        set
+        {
+            if (value == null)
+            {
+                return;
+            }
+
+            _values[address] = value;
+        }
     }
 
     public event EventHandler<DeviceReadArgs>? BeforeDeviceRead;
