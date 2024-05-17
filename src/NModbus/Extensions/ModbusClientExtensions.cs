@@ -30,12 +30,13 @@ public static class ModbusClientExtensions
         };
     }
 
-    public static async Task<TResponse> ExecuteAsync<TRequest, TResponse>(
+    public static async Task<TResponse?> ExecuteAsync<TRequest, TResponse>(
         this IModbusClient client,
         byte functionCode,
         byte unitIdentifier,
         TRequest request,
-        CancellationToken cancellationToken = default)
+        CancellationToken cancellationToken = default
+    )
     {
         //Find the client function.
         var clientFunction = client.GetClientFunction<TRequest, TResponse>(functionCode);
@@ -92,7 +93,11 @@ public static class ModbusClientExtensions
             request,
             cancellationToken);
 
-        return response.Unpack(request.QuantityOfOutputs);
+        return response switch
+        {
+            null => Array.Empty<bool>(),
+            _ => response.Unpack(request.QuantityOfOutputs)
+        };
     }
 
     public static async Task<bool[]> ReadDiscreteInputsAsync(
@@ -110,7 +115,11 @@ public static class ModbusClientExtensions
             request,
             cancellationToken);
 
-        return response.Unpack(request.QuantityOfInputs);
+        return response switch
+        {
+            null => Array.Empty<bool>(),
+            _ => response.Unpack(request.QuantityOfInputs)
+        };
     }
 
     public static async Task<ushort[]> ReadHoldingRegistersAsync(this IModbusClient client, byte unitIdentifier,
@@ -124,7 +133,11 @@ public static class ModbusClientExtensions
             request,
             cancellationToken);
 
-        return response.RegisterValues;
+        return response switch
+        {
+            null => Array.Empty<ushort>(),
+            _ => response.RegisterValues
+        };
     }
 
     public static Task WriteSingleRegisterAsync(this IModbusClient client, byte unitIdentifier,
@@ -151,7 +164,11 @@ public static class ModbusClientExtensions
             request,
             cancellationToken);
 
-        return response.InputRegisters;
+        return response switch
+        {
+            null => Array.Empty<ushort>(),
+            _ => response.InputRegisters
+        };
     }
 
     public static Task WriteSingleCoilAsync(this IModbusClient client, byte unitIdentifier, ushort outputAddress,
@@ -239,7 +256,11 @@ public static class ModbusClientExtensions
             request,
             cancellationToken);
 
-        return response.ReadRegistersValue;
+        return response switch
+        {
+            null => Array.Empty<ushort>(),
+            _ => response.ReadRegistersValue
+        };
     }
 
     public static async Task<ushort[]> ReadFifoQueueAsync(
@@ -256,6 +277,10 @@ public static class ModbusClientExtensions
             request,
             cancellationToken);
 
-        return response.FifoValueRegister;
+        return response switch
+        {
+            null => Array.Empty<ushort>(),
+            _ => response.FifoValueRegister
+        };
     }
 }
