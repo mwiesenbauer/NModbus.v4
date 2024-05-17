@@ -95,11 +95,11 @@ internal class ModbusServerTcpConnection : IAsyncDisposable
                     requestMessage.UnitIdentifier,
                     requestMessage.ProtocolDataUnit.FunctionCode);
 
-                await using (var backchannelTransport =
-                             new BackchannelTcpClientTransport(_stream, requestMessage.Header.TransactionIdentifier))
-                {
-                    await _serverNetwork.ProcessRequestAsync(requestMessage, backchannelTransport, cancellationToken);
-                }
+                await using var backchannelTransport = new BackchannelTcpClientTransport(
+                    _stream,
+                    requestMessage.Header.TransactionIdentifier
+                );
+                await _serverNetwork.ProcessRequestAsync(requestMessage, backchannelTransport, cancellationToken);
             }
         }
         catch (Exception ex)
