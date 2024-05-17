@@ -76,7 +76,7 @@ namespace NModbus.Transport.IP
 
                 var serverConnection = new ModbusServerTcpConnection(tcpClient, _serverNetwork, _loggerFactory, _options);
 
-                await serverConnection.IntializeAsync(cancellationToken)
+                await serverConnection.InitializeAsync(cancellationToken)
                     .ConfigureAwait(false);
 
                 if (!_connections.TryAdd(endpoint, serverConnection))

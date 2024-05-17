@@ -46,7 +46,7 @@ namespace NModbus.Transport.IP
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
         /// <remarks>This is broken out because we can't do async in the constructor, and we want to report errors back to the caller.</remarks>
-        internal async Task IntializeAsync(CancellationToken cancellationToken)
+        internal async Task InitializeAsync(CancellationToken cancellationToken)
         {
             var localStream = _tcpClient.GetStream();
 
@@ -72,7 +72,7 @@ namespace NModbus.Transport.IP
             {
 
                 if (_stream == null)
-                    throw new InvalidOperationException("You must call " + nameof(IntializeAsync) + " first.");
+                    throw new InvalidOperationException("You must call " + nameof(InitializeAsync) + " first.");
 
                 while (!cancellationToken.IsCancellationRequested)
                 {
