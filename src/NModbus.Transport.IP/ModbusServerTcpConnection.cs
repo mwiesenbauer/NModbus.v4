@@ -110,7 +110,7 @@ internal class ModbusServerTcpConnection : IAsyncDisposable
 
     protected void OnConnectionClosed()
     {
-        ConnectionClosed?.Invoke(this, new TcpConnectionEventArgs(_tcpClient.Client.RemoteEndPoint.ToString()));
+        ConnectionClosed?.Invoke(this, new TcpConnectionEventArgs(_tcpClient.Client.RemoteEndPoint?.ToString()));
     }
 
     public async ValueTask DisposeAsync()

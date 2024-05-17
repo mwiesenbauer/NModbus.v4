@@ -2,7 +2,7 @@ namespace NModbus.Transport.IP;
 
 internal class TcpConnectionEventArgs : EventArgs
 {
-    public TcpConnectionEventArgs(string endpoint)
+    public TcpConnectionEventArgs(string? endpoint)
     {
         if (string.IsNullOrEmpty(endpoint))
         {
