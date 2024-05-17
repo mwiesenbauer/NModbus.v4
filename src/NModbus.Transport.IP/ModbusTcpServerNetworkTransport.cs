@@ -87,6 +87,7 @@ public class ModbusTcpServerNetworkTransport : IModbusServerNetworkTransport
             _logger.LogInformation("Accepted a client from {Endpoint}", endpoint);
 
             var serverConnection = new ModbusServerTcpConnection(tcpClient, _serverNetwork, _loggerFactory, _options);
+            serverConnection.ConnectionClosed += ServerConnection_ConnectionClosed;
 
             await serverConnection.InitializeAsync(cancellationToken).ConfigureAwait(false);
 
@@ -94,8 +95,6 @@ public class ModbusTcpServerNetworkTransport : IModbusServerNetworkTransport
             {
                 _logger.LogWarning("Unable to add TCP server connection for '{Endpoint}'.", endpoint);
             }
-
-            serverConnection.ConnectionClosed += ServerConnection_ConnectionClosed;
         }
         catch (SocketException ex) when (cancellationToken.IsCancellationRequested)
         {
