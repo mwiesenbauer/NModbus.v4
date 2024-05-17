@@ -32,12 +32,21 @@ public class ModbusIPClientTransport : ModbusIPClientTransportBase
 
         var receivedMessage = await streamContainer.Stream.ReadIpMessageAsync(cancellationToken);
 
-        if (receivedMessage is null || receivedMessage.Header.TransactionIdentifier != transactionIdentifier)
+        var matches = TransactionIdentifierMatches(receivedMessage, transactionIdentifier);
+        return matches switch
         {
-            throw new InvalidOperationException($"TransactionIdentifier {transactionIdentifier}");
-        }
+            true => receivedMessage,
+            _ => throw new InvalidOperationException($"TransactionIdentifier {transactionIdentifier}"),
+        };
+    }
 
-        return receivedMessage;
+    private static bool TransactionIdentifierMatches(ModbusIPMessage? msg, ushort transactionIdentifier)
+    {
+        return msg switch
+        {
+            null => false,
+            _ => msg.Header.TransactionIdentifier == transactionIdentifier
+        };
     }
 
     public override async Task SendAsync(IModbusDataUnit message, CancellationToken cancellationToken = default)
