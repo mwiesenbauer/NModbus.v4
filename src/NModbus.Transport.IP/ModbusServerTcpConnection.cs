@@ -14,14 +14,14 @@ internal class ModbusServerTcpConnection : IAsyncDisposable
     private readonly IModbusServerNetwork _serverNetwork;
     private readonly SslServerAuthenticationOptions? _options;
     private readonly CancellationTokenSource _cancellationTokenSource = new();
-    private Task _listenTask;
     private readonly ILogger _logger;
     private readonly int _connectionId;
 
-    private IModbusStream _stream;
+    private Task? _listenTask;
+    private IModbusStream? _stream;
     private static int _connectionIdSource;
 
-    public event EventHandler<TcpConnectionEventArgs> ConnectionClosed;
+    public event EventHandler<TcpConnectionEventArgs>? ConnectionClosed;
 
     internal ModbusServerTcpConnection(
         TcpClient tcpClient,
@@ -116,6 +116,11 @@ internal class ModbusServerTcpConnection : IAsyncDisposable
     public async ValueTask DisposeAsync()
     {
         _cancellationTokenSource.Dispose();
+
+        if (_listenTask == null)
+        {
+            return;
+        }
 
         await _listenTask;
     }
