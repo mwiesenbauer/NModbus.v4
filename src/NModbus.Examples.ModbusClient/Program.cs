@@ -6,7 +6,7 @@ using NModbus.Extensions;
 
 var loggerFactory = LoggerFactory.Create(builder =>
 {
-    builder
+    _ = builder
         .SetMinimumLevel(LogLevel.Debug)
         .AddConsole();
 });

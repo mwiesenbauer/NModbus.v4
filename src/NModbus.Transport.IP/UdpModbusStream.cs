@@ -100,7 +100,7 @@ public class UdpModbusStream : IModbusStream
 
         Array.Copy(buffer, offset, datagram, 0, count);
 
-        await _udpClient.SendAsync(datagram, count);
+        _ = await _udpClient.SendAsync(datagram, count);
     }
 
     public ValueTask DisposeAsync()
