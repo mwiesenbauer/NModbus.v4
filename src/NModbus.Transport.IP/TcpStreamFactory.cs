@@ -12,7 +12,7 @@ public class TcpStreamFactory : IStreamFactory
 {
     private readonly IPEndPoint _endPoint;
     private readonly Action<TcpClient> _tcpClientConfig;
-    private readonly SslClientAuthenticationOptions _sslOptions;
+    private readonly SslClientAuthenticationOptions? _sslOptions;
 
     /// <summary>
     /// Constructor
@@ -23,11 +23,12 @@ public class TcpStreamFactory : IStreamFactory
     /// <exception cref="ArgumentNullException"></exception>
     public TcpStreamFactory(
         IPEndPoint endPoint,
-        Action<TcpClient> tcpClientConfig = null,
-        SslClientAuthenticationOptions sslOptions = null)
+        Action<TcpClient>? tcpClientConfig = null,
+        SslClientAuthenticationOptions? sslOptions = null
+    )
     {
         _endPoint = endPoint ?? throw new ArgumentNullException(nameof(endPoint));
-        _tcpClientConfig = tcpClientConfig;
+        _tcpClientConfig = tcpClientConfig ?? (_ => { });
         _sslOptions = sslOptions;
     }
 
@@ -43,23 +44,21 @@ public class TcpStreamFactory : IStreamFactory
     {
         var tcpClient = new TcpClient();
 
-        _tcpClientConfig?.Invoke(tcpClient);
+        _tcpClientConfig(tcpClient);
 
         await tcpClient.ConnectAsync(_endPoint.Address, _endPoint.Port);
 
-        if (_sslOptions != null)
-        {
-            var sslStream = new SslStream(
-                tcpClient.GetStream(),
-                false);
-
-            await sslStream.AuthenticateAsClientAsync(_sslOptions, cancellationToken);
-
-            return new TcpModbusStream(tcpClient, sslStream);
-        }
-        else
+        if (_sslOptions == null)
         {
             return new TcpModbusStream(tcpClient, tcpClient.GetStream());
         }
+
+        var sslStream = new SslStream(
+            tcpClient.GetStream(),
+            false);
+
+        await sslStream.AuthenticateAsClientAsync(_sslOptions, cancellationToken);
+
+        return new TcpModbusStream(tcpClient, sslStream);
     }
 }
