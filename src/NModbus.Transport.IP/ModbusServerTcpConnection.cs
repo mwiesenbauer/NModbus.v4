@@ -12,7 +12,7 @@ internal class ModbusServerTcpConnection : IAsyncDisposable
 {
     private readonly TcpClient _tcpClient;
     private readonly IModbusServerNetwork _serverNetwork;
-    private readonly SslServerAuthenticationOptions _options;
+    private readonly SslServerAuthenticationOptions? _options;
     private readonly CancellationTokenSource _cancellationTokenSource = new();
     private Task _listenTask;
     private readonly ILogger _logger;
@@ -27,7 +27,8 @@ internal class ModbusServerTcpConnection : IAsyncDisposable
         TcpClient tcpClient,
         IModbusServerNetwork serverNetwork,
         ILoggerFactory loggerFactory,
-        SslServerAuthenticationOptions options)
+        SslServerAuthenticationOptions? options
+    )
     {
         _connectionId = Interlocked.Increment(ref _connectionIdSource);
 

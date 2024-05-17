@@ -12,7 +12,7 @@ public class ModbusTcpServerNetworkTransport : IModbusServerNetworkTransport
     private readonly IModbusServerNetwork _serverNetwork;
     private readonly ILoggerFactory _loggerFactory;
     private readonly ILogger<ModbusTcpServerNetworkTransport> _logger;
-    private readonly SslServerAuthenticationOptions _options;
+    private readonly SslServerAuthenticationOptions? _options;
     private readonly ConcurrentDictionary<string, ModbusServerTcpConnection> _connections = new();
     private readonly CancellationTokenSource _cancellationTokenSource = new();
     private readonly Task _listenTask;
@@ -29,7 +29,8 @@ public class ModbusTcpServerNetworkTransport : IModbusServerNetworkTransport
         TcpListener tcpListener,
         IModbusServerNetwork serverNetwork,
         ILoggerFactory loggerFactory,
-        SslServerAuthenticationOptions options = null)
+        SslServerAuthenticationOptions? options = null
+    )
     {
         _tcpListener = tcpListener ?? throw new ArgumentNullException(nameof(tcpListener));
         _serverNetwork = serverNetwork ?? throw new ArgumentNullException(nameof(serverNetwork));
@@ -101,7 +102,7 @@ public class ModbusTcpServerNetworkTransport : IModbusServerNetworkTransport
         }
     }
 
-    private void ServerConnection_ConnectionClosed(object sender, TcpConnectionEventArgs e)
+    private void ServerConnection_ConnectionClosed(object? sender, TcpConnectionEventArgs e)
     {
         if (!_connections.TryRemove(e.Endpoint, out _))
         {
