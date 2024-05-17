@@ -75,16 +75,22 @@ public class ModbusTcpServerNetworkTransport : IModbusServerNetworkTransport
     {
         try
         {
-            var endpoint = tcpClient.Client.RemoteEndPoint.ToString();
+            var remoteEndPoint = tcpClient.Client.RemoteEndPoint;
+            if (remoteEndPoint == null)
+            {
+                _logger.LogInformation("Client has no remote endpoint, probably disconnected");
+                return;
+            }
+
+            var endpoint = remoteEndPoint.ToString();
 
             _logger.LogInformation("Accepted a client from {Endpoint}", endpoint);
 
             var serverConnection = new ModbusServerTcpConnection(tcpClient, _serverNetwork, _loggerFactory, _options);
 
-            await serverConnection.InitializeAsync(cancellationToken)
-                .ConfigureAwait(false);
+            await serverConnection.InitializeAsync(cancellationToken).ConfigureAwait(false);
 
-            if (!_connections.TryAdd(endpoint, serverConnection))
+            if (!_connections.TryAdd(endpoint!, serverConnection))
             {
                 _logger.LogWarning("Unable to add TCP server connection for '{Endpoint}'.", endpoint);
             }
