@@ -62,7 +62,7 @@ jobs:
       # just to make sure the solution is packable. It's unfortunate to make it to a post PR 
       # build to find out that we can't pack.
       - name: Pack
-        run: dotnet pack --configuration Release /p:Version=1.0.0 --output . ./src/
+        run: dotnet pack --no-build --configuration Release /p:Version=1.0.0 --output . ./src/
   dotnet-format:
     runs-on: ubuntu-latest
     timeout-minutes: 5
