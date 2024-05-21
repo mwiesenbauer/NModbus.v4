@@ -1,7 +1,7 @@
-using Microsoft.Extensions.Logging;
-using NModbus.Interfaces;
 using System.Net.Security;
 using System.Net.Sockets;
+using Microsoft.Extensions.Logging;
+using NModbus.Interfaces;
 
 namespace NModbus.Transport.IP;
 

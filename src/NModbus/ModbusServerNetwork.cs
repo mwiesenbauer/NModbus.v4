@@ -1,6 +1,6 @@
+using System.Collections.Concurrent;
 using Microsoft.Extensions.Logging;
 using NModbus.Interfaces;
-using System.Collections.Concurrent;
 using NModbus.Messages;
 
 namespace NModbus;

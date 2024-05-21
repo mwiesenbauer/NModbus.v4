@@ -1,7 +1,7 @@
-using NModbus.Interfaces;
 using System.Net;
 using System.Net.Security;
 using System.Net.Sockets;
+using NModbus.Interfaces;
 
 namespace NModbus.Transport.IP;
 

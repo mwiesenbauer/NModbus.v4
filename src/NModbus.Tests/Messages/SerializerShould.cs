@@ -1,5 +1,4 @@
 using NModbus.Messages;
-using Shouldly;
 
 namespace NModbus.Tests.Messages;
 

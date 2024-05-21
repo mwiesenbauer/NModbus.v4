@@ -1,5 +1,5 @@
-using NModbus.Interfaces;
 using System.Net.Sockets;
+using NModbus.Interfaces;
 
 namespace NModbus.Transport.IP;
 

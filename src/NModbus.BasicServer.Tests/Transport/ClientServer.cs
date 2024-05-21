@@ -1,9 +1,9 @@
+using System.Net;
+using System.Net.Sockets;
 using Microsoft.Extensions.Logging;
 using NModbus.Interfaces;
 using NModbus.Transport.IP;
 using NModbus.Transport.IP.ConnectionStrategies;
-using System.Net;
-using System.Net.Sockets;
 
 namespace NModbus.BasicServer.Tests.Transport;
 

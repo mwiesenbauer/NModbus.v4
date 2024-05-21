@@ -1,7 +1,7 @@
+using System.Net;
 using Microsoft.Extensions.Logging;
 using NModbus;
 using NModbus.Examples.ModbusClient;
-using System.Net;
 using NModbus.Extensions;
 
 var loggerFactory = LoggerFactory.Create(builder =>

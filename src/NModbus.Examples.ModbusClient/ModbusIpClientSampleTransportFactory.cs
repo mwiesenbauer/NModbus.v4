@@ -1,9 +1,9 @@
+using System.Net;
+using System.Net.Security;
 using Microsoft.Extensions.Logging;
 using NModbus.Interfaces;
 using NModbus.Transport.IP;
 using NModbus.Transport.IP.ConnectionStrategies;
-using System.Net;
-using System.Net.Security;
 
 namespace NModbus.Examples.ModbusClient;
 

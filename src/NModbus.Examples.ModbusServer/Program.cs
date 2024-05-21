@@ -1,11 +1,11 @@
-using Microsoft.Extensions.Logging;
-using NModbus;
-using NModbus.BasicServer;
-using NModbus.Transport.IP;
 using System.Net;
 using System.Net.Security;
 using System.Net.Sockets;
 using System.Security.Cryptography.X509Certificates;
+using Microsoft.Extensions.Logging;
+using NModbus;
+using NModbus.BasicServer;
+using NModbus.Transport.IP;
 
 var loggerFactory = LoggerFactory.Create(builder =>
 {

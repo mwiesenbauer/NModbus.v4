@@ -7,7 +7,7 @@ namespace NModbus.BasicServer;
 /// Stores points using a Dictionary rather than an array.
 /// </summary>
 /// <remarks>
-/// Rather than allocate a full array of <see cref="UInt16.MaxValue"/> values, we use a <see cref="Dictionary{UInt16, TValue}"/>
+/// Rather than allocate a full array of <see cref="ushort.MaxValue"/> values, we use a <see cref="Dictionary{UInt16, TValue}"/>
 /// to store only those addresses which have been set.
 /// </remarks>
 /// <typeparam name="T"></typeparam>
