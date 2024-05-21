@@ -1,5 +1,5 @@
-using NModbus.Interfaces;
 using System.IO.Ports;
+using NModbus.Interfaces;
 
 namespace NModbus.Transport.Serial;
 
