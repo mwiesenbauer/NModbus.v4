@@ -27,13 +27,13 @@ public class ModbusStream : IModbusStream
     }
 
     public Task<int> ReadAsync(byte[] buffer, int offset, int count,
-            CancellationToken cancellationToken = default)
+        CancellationToken cancellationToken = default)
     {
         return _stream.ReadAsync(buffer, offset, count, cancellationToken);
     }
 
     public Task WriteAsync(byte[] buffer, int offset, int count,
-            CancellationToken cancellationToken = default)
+        CancellationToken cancellationToken = default)
     {
         return _stream.WriteAsync(buffer, offset, count, cancellationToken);
     }

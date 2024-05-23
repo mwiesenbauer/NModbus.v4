@@ -17,4 +17,3 @@ public interface IModbusDataUnit
     /// </summary>
     byte UnitIdentifier { get; }
 }
-

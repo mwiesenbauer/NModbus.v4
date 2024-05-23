@@ -49,4 +49,3 @@ if (!serverNetwork.TryAddServer(server))
 
 Console.WriteLine("Awaiting requests... Press any key to exit.");
 Console.ReadKey();
-

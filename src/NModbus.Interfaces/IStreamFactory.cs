@@ -12,4 +12,3 @@ public interface IStreamFactory
     /// <returns></returns>
     Task<IModbusStream> CreateAndConnectAsync(CancellationToken cancellationToken);
 }
-
