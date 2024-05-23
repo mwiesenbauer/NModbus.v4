@@ -1,4 +1,4 @@
-﻿using NModbus.Interfaces;
+using NModbus.Interfaces;
 using System.Diagnostics.CodeAnalysis;
 
 namespace NModbus
@@ -10,12 +10,13 @@ namespace NModbus
     {
         private readonly Stream _stream;
 
-        public int ReceiveTimeout 
+        public int ReceiveTimeout
         {
             get => _stream.ReadTimeout;
             set => _stream.ReadTimeout = value;
         }
-        public int SendTimeout 
+
+        public int SendTimeout
         {
             get => _stream.WriteTimeout;
             set => _stream.WriteTimeout = value;
@@ -26,12 +27,14 @@ namespace NModbus
             _stream = stream ?? throw new ArgumentNullException(nameof(stream));
         }
 
-        public async Task<int> ReadAsync(byte[] buffer, int offset, int count, CancellationToken cancellationToken = default)
+        public async Task<int> ReadAsync(byte[] buffer, int offset, int count,
+            CancellationToken cancellationToken = default)
         {
             return await _stream.ReadAsync(buffer, offset, count, cancellationToken).ConfigureAwait(false);
         }
 
-        public async Task WriteAsync(byte[] buffer, int offset, int count, CancellationToken cancellationToken = default)
+        public async Task WriteAsync(byte[] buffer, int offset, int count,
+            CancellationToken cancellationToken = default)
         {
             await _stream.WriteAsync(buffer, offset, count, cancellationToken);
         }

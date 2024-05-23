@@ -1,4 +1,4 @@
-﻿namespace NModbus.Endian
+namespace NModbus.Endian
 {
     public static class EndianWriterExtensions
     {

@@ -1,4 +1,4 @@
-﻿namespace NModbus.Interfaces
+namespace NModbus.Interfaces
 {
     /// <summary>
     /// There isn't a term in the Modbus spec that refers to the combination of a Unit Identifier with a Protocol Data Unit.
@@ -18,3 +18,4 @@
         byte UnitIdentifier { get; }
     }
 }
+

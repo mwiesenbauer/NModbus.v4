@@ -1,4 +1,4 @@
-﻿namespace NModbus.Interfaces
+namespace NModbus.Interfaces
 {
     /// <summary>
     /// Processes requests and return an appropriate response (or error message)

@@ -1,4 +1,4 @@
-﻿namespace NModbus.Helpers
+namespace NModbus.Helpers
 {
     /// <summary>
     /// Utilities for packing and unpacking bits to and from byte arrays.
@@ -57,7 +57,7 @@
             var byteIndex = 0;
             byte mask = 0b00000001;
 
-            for(var bitIndex = 0; bitIndex < bits.Length; bitIndex++)
+            for (var bitIndex = 0; bitIndex < bits.Length; bitIndex++)
             {
                 if (bits[bitIndex])
                 {
@@ -86,7 +86,7 @@
         {
             if (numberOfBits <= 0)
                 throw new ArgumentOutOfRangeException(nameof(numberOfBits));
-            
+
             var numberOfBytes = numberOfBits / 8;
 
             if (numberOfBits % 8 != 0)

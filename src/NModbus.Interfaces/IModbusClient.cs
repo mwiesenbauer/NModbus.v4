@@ -1,4 +1,4 @@
-﻿using NModbus.Functions;
+using NModbus.Functions;
 
 namespace NModbus.Interfaces
 {

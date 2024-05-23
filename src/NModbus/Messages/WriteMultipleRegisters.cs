@@ -1,4 +1,4 @@
-﻿using NModbus.Endian;
+using NModbus.Endian;
 
 namespace NModbus.Messages
 {
@@ -31,7 +31,7 @@ namespace NModbus.Messages
             return new WriteMultipleRegistersRequest(startingAddress, registers);
         }
 
-        protected override WriteMultipleRegistersResponse DeserializeResponseCore(EndianReader reader)        
+        protected override WriteMultipleRegistersResponse DeserializeResponseCore(EndianReader reader)
         {
             var startingAddress = reader.ReadUInt16();
             var quantityOfRegisters = reader.ReadUInt16();
@@ -41,6 +41,6 @@ namespace NModbus.Messages
     }
 
     public record WriteMultipleRegistersRequest(ushort StartingAddress, ushort[] Registers);
-        
+
     public record WriteMultipleRegistersResponse(ushort StartingAddress, ushort QuantityOfRegisters);
 }

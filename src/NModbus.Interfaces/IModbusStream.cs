@@ -1,9 +1,9 @@
-﻿namespace NModbus.Interfaces
+namespace NModbus.Interfaces
 {
     /// <summary>
     /// Represents a stream resource.
     /// </summary>
-    public  interface IModbusStream : IAsyncDisposable
+    public interface IModbusStream : IAsyncDisposable
     {
         /// <summary>
         /// Reads a number of bytes from the input buffer.

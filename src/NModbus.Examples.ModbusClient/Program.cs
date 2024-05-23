@@ -1,4 +1,4 @@
-﻿using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging;
 using NModbus;
 using NModbus.Examples.ModbusClient;
 using System.Net;

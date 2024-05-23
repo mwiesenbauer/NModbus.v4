@@ -1,4 +1,4 @@
-﻿using NModbus.Endian;
+using NModbus.Endian;
 
 namespace NModbus.Messages
 {
@@ -42,9 +42,9 @@ namespace NModbus.Messages
     }
 
     public record ReadWriteMultipleRegistersRequest(
-        ushort ReadStartingAddress, 
-        ushort QuantityToRead, 
-        ushort WriteStartingAddress, 
+        ushort ReadStartingAddress,
+        ushort QuantityToRead,
+        ushort WriteStartingAddress,
         ushort[] WriteRegistersValue);
 
     public record ReadWriteMultipleRegistersResponse(ushort[] ReadRegistersValue);

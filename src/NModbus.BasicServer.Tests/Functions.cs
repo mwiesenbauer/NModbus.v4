@@ -1,4 +1,4 @@
-﻿using Divergic.Logging.Xunit;
+using Divergic.Logging.Xunit;
 using Microsoft.Extensions.Logging;
 using Moq;
 using NModbus.BasicServer;
@@ -40,7 +40,7 @@ namespace NModbus.Tests
         {
             var storage = new SparsePointStorage<bool>();
 
-            for(int index = 0; index < values.Length; index++)
+            for (int index = 0; index < values.Length; index++)
             {
                 storage[(ushort)(index + startingAddress)] = values[index];
             }
@@ -70,7 +70,7 @@ namespace NModbus.Tests
         }
 
         [Theory]
-        [InlineData(100, new bool[] { true, false, false, false } )]
+        [InlineData(100, new bool[] { true, false, false, false })]
         public async Task WriteMultipleCoils_ShouldWork(ushort startingAddress, bool[] values)
         {
             var storageMock = new Mock<IDevicePointStorage<bool>>();
@@ -119,7 +119,7 @@ namespace NModbus.Tests
 
             var unpacked = response.Unpack((ushort)expectedValues.Length);
 
-            unpacked.ShouldBe(expectedValues);         
+            unpacked.ShouldBe(expectedValues);
         }
 
         /// <summary>

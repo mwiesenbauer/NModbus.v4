@@ -1,4 +1,4 @@
-﻿using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging;
 using NModbus.Interfaces;
 using System.Collections.Concurrent;
 using System.Net.Security;

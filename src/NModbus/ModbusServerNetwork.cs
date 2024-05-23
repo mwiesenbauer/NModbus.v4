@@ -1,4 +1,4 @@
-﻿using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging;
 using NModbus.Interfaces;
 using System.Collections.Concurrent;
 
@@ -27,8 +27,8 @@ namespace NModbus
         }
 
         public async Task ProcessRequestAsync(
-            IModbusDataUnit requestMessage, 
-            IModbusClientTransport clientTransport, 
+            IModbusDataUnit requestMessage,
+            IModbusClientTransport clientTransport,
             CancellationToken cancellationToken = default)
         {
             if (requestMessage.UnitIdentifier == 0)

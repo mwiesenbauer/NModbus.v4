@@ -1,4 +1,4 @@
-﻿namespace NModbus.Messages
+namespace NModbus.Messages
 {
     public readonly struct ReadReferenceResponse
     {

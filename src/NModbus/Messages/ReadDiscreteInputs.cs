@@ -1,4 +1,4 @@
-﻿using NModbus.Endian;
+using NModbus.Endian;
 using NModbus.Helpers;
 
 namespace NModbus.Messages

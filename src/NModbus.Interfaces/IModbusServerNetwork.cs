@@ -1,4 +1,4 @@
-﻿namespace NModbus.Interfaces
+namespace NModbus.Interfaces
 {
     /// <summary>
     /// A network of Modbus servers.

@@ -1,4 +1,4 @@
-﻿namespace NModbus.Interfaces
+namespace NModbus.Interfaces
 {
     /// <summary>
     /// The transport for a Modbus client.

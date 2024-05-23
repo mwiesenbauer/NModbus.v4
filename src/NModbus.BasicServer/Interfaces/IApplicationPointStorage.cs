@@ -1,4 +1,4 @@
-﻿namespace NModbus.BasicServer.Interfaces
+namespace NModbus.BasicServer.Interfaces
 {
     /// <summary>
     /// This is storage from the application perspective.

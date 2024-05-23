@@ -1,4 +1,4 @@
-﻿using NModbus.Endian;
+using NModbus.Endian;
 
 namespace NModbus.Messages
 {
@@ -35,6 +35,6 @@ namespace NModbus.Messages
     }
 
     public record WriteSingleRegisterRequest(ushort Address, ushort Value);
-    
+
     public record WriteSingleRegisterResponse(ushort Address, ushort Value);
 }

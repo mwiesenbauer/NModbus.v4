@@ -1,4 +1,4 @@
-﻿using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging;
 using NModbus;
 using NModbus.BasicServer;
 using NModbus.Transport.IP;
@@ -49,3 +49,4 @@ if (!serverNetwork.TryAddServer(server))
 
 Console.WriteLine("Awaiting requests... Press any key to exit.");
 Console.ReadKey();
+

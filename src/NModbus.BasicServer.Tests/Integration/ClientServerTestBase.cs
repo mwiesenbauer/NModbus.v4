@@ -1,4 +1,4 @@
-﻿using Divergic.Logging.Xunit;
+using Divergic.Logging.Xunit;
 using Microsoft.Extensions.Logging;
 using NModbus.BasicServer.Tests.Transport;
 using Xunit.Abstractions;

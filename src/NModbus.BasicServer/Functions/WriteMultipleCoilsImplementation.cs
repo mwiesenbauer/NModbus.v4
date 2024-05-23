@@ -1,4 +1,4 @@
-﻿using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging;
 using NModbus.BasicServer.Interfaces;
 using NModbus.Interfaces;
 using NModbus.Messages;

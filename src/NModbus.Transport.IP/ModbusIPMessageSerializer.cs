@@ -1,4 +1,4 @@
-﻿using NModbus.Interfaces;
+using NModbus.Interfaces;
 using NModbus.Transport.IP.Mbap;
 
 namespace NModbus.Transport.IP

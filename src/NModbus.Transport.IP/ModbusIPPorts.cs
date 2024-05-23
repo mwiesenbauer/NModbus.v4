@@ -1,4 +1,4 @@
-﻿namespace NModbus.Transport.IP
+namespace NModbus.Transport.IP
 {
     /// <summary>
     /// Default ports for Modbus over TCP.

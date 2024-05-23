@@ -1,4 +1,4 @@
-﻿using NModbus.Endian;
+using NModbus.Endian;
 using NModbus.Helpers;
 
 namespace NModbus.Messages
@@ -32,8 +32,8 @@ namespace NModbus.Messages
     }
 
     public record WriteMultipleCoilsRequest(ushort StartingAddress, bool[] OutputsValue);
-    
+
 
     public record WriteMultipleCoilsResponse(ushort StartingAddress, ushort QuantityOfOutputs);
-    
+
 }

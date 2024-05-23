@@ -1,4 +1,4 @@
-﻿using NModbus.Extensions;
+using NModbus.Extensions;
 
 namespace NModbus.Endian
 {

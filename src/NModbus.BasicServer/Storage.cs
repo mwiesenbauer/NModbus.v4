@@ -1,4 +1,4 @@
-﻿using NModbus.BasicServer.Interfaces;
+using NModbus.BasicServer.Interfaces;
 
 namespace NModbus.BasicServer
 {

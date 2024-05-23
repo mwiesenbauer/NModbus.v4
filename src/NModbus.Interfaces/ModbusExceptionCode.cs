@@ -1,4 +1,4 @@
-﻿namespace NModbus.Interfaces
+namespace NModbus.Interfaces
 {
     public enum ModbusExceptionCode : byte
     {

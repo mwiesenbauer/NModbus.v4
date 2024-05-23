@@ -1,4 +1,4 @@
-﻿using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging;
 using NModbus.Extensions;
 using NModbus.Functions;
 using NModbus.Interfaces;
@@ -37,7 +37,7 @@ namespace NModbus
                 new ModbusClientFunction<MaskWriteRegisterRequest, MaskWriteRegisterResponse>(ModbusFunctionCodes.MaskWriteRegister, new MaskWriteRegisterMessageSerializer()),
                 new ModbusClientFunction<ReadWriteMultipleRegistersRequest, ReadWriteMultipleRegistersResponse>(ModbusFunctionCodes.ReadWriteMultipleRegisters, new ReadWriteMultipleRegistersMessageSerializer()),
                 new ModbusClientFunction<ReadFifoQueueRequest, ReadFifoQueueResponse>(ModbusFunctionCodes.ReadFifoQueue, new ReadFifoQueueMessageSerializer()),
-            };  
+            };
 
             _clientFunctions = defaultClientFunctions
                 .ToDictionary(f => f.FunctionCode);
@@ -45,7 +45,7 @@ namespace NModbus
             //Now allow the caller to override any of the client functions (or add new ones).
             if (customClientFunctions != null)
             {
-                foreach(var clientFunction in customClientFunctions)
+                foreach (var clientFunction in customClientFunctions)
                 {
                     _logger.LogInformation("Custom implementation of function code {FunctionCode} with type {Type}.", $"0x{clientFunction.FunctionCode}", clientFunction.GetType().Name);
                     _clientFunctions[clientFunction.FunctionCode] = clientFunction;

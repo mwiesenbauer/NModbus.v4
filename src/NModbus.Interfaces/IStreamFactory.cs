@@ -1,4 +1,4 @@
-﻿namespace NModbus.Interfaces
+namespace NModbus.Interfaces
 {
     /// <summary>
     /// Responsible for creating streams.
@@ -13,3 +13,4 @@
         Task<IModbusStream> CreateAndConnectAsync(CancellationToken cancellationToken);
     }
 }
+

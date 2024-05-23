@@ -1,4 +1,4 @@
-﻿namespace NModbus.Transport.IP
+namespace NModbus.Transport.IP
 {
     /// <summary>
     /// Represents a methodology of creating and or maintaining TCP Client connections.

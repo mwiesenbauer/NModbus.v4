@@ -1,4 +1,4 @@
-﻿using NModbus.Helpers;
+using NModbus.Helpers;
 
 namespace NModbus.Tests.Helpers
 {
@@ -9,7 +9,7 @@ namespace NModbus.Tests.Helpers
         {
             var bytes = new byte[] { 0xcd, 0x6b, 0x05 };
 
-            var unpacked =  BitPacker.Unpack(bytes, 19);
+            var unpacked = BitPacker.Unpack(bytes, 19);
 
             var expectedBits = "10110011 11010110 101".Replace(" ", "")
                 .Select(c => c == '1')
@@ -20,7 +20,7 @@ namespace NModbus.Tests.Helpers
 
         [Fact]
         public void Pack_ShouldWork()
-        { 
+        {
             var bits = "10110011 11010110 101".Replace(" ", "")
                 .Select(c => c == '1')
                 .ToArray();

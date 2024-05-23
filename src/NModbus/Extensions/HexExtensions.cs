@@ -1,4 +1,4 @@
-﻿namespace NModbus.Extensions
+namespace NModbus.Extensions
 {
     /// <summary>
     /// Extensions to aid in the display of binary values in hex format.

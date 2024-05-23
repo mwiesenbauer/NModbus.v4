@@ -1,4 +1,4 @@
-﻿using NModbus.BasicServer.Interfaces;
+using NModbus.BasicServer.Interfaces;
 using NModbus.Interfaces;
 
 namespace NModbus.BasicServer
@@ -15,8 +15,8 @@ namespace NModbus.BasicServer
     {
         private readonly Dictionary<ushort, T> _values = new Dictionary<ushort, T>();
 
-        public T this[ushort address] 
-        { 
+        public T this[ushort address]
+        {
             get
             {
                 _values.TryGetValue(address, out var value);

@@ -1,4 +1,4 @@
-﻿using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging;
 using NModbus.BasicServer.Interfaces;
 using NModbus.Interfaces;
 using NModbus.Messages;
@@ -21,7 +21,7 @@ namespace NModbus.BasicServer.Functions
             var registers = _storage.ReadPoints(request.StartingAddress, request.QuantityOfRegisters);
 
             return Task.FromResult(new ReadHoldingRegistersResponse(registers));
-            
+
         }
     }
 }

@@ -1,4 +1,4 @@
-﻿using NModbus.Extensions;
+using NModbus.Extensions;
 using NModbus.Interfaces;
 using NModbus.Transport.IP.Mbap;
 
@@ -7,7 +7,7 @@ namespace NModbus.Transport.IP
     public static class ModbusStreamExtensions
     {
         public static async Task<ModbusIPMessage> ReadIpMessageAsync(
-            this IModbusStream stream, 
+            this IModbusStream stream,
             CancellationToken cancellationToken = default)
         {
             var mbapHeaderBuffer = new byte[MbapSerializer.MbapHeaderLength];

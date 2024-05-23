@@ -1,4 +1,4 @@
-﻿namespace NModbus
+namespace NModbus
 {
     /// <summary>
     /// Supported function codes

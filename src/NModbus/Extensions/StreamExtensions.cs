@@ -1,4 +1,4 @@
-﻿using NModbus.Interfaces;
+using NModbus.Interfaces;
 
 namespace NModbus.Extensions
 {
@@ -23,7 +23,7 @@ namespace NModbus.Extensions
                 if (read == 0)
                     return false;
 
-                totalRead+= read;
+                totalRead += read;
             }
 
             return true;

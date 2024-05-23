@@ -1,4 +1,4 @@
-﻿using NModbus.Interfaces;
+using NModbus.Interfaces;
 
 namespace NModbus.Transport.IP
 {

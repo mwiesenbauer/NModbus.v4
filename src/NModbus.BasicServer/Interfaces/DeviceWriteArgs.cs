@@ -1,4 +1,4 @@
-﻿namespace NModbus.BasicServer.Interfaces
+namespace NModbus.BasicServer.Interfaces
 {
     public class DeviceWriteArgs<T> : EventArgs
     {

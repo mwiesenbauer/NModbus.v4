@@ -1,4 +1,4 @@
-﻿namespace NModbus.Functions
+namespace NModbus.Functions
 {
     public interface IModbusMessageSerializer<TRequest, TResponse>
     {

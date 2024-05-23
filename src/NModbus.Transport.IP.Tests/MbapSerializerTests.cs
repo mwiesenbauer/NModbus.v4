@@ -1,4 +1,4 @@
-﻿using NModbus.Transport.IP.Mbap;
+using NModbus.Transport.IP.Mbap;
 using Shouldly;
 
 namespace NModbus.Transport.IP.Tests

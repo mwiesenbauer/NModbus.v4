@@ -1,4 +1,4 @@
-﻿namespace NModbus.Interfaces
+namespace NModbus.Interfaces
 {
 
     /// <summary>
@@ -32,7 +32,7 @@
         /// The function code.
         /// </summary>
         public byte FunctionCode { get; }
-        
+
         /// <summary>
         /// The data part of this <see cref="ProtocolDataUnit"/>.
         /// </summary>

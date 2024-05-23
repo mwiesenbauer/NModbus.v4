@@ -1,4 +1,4 @@
-﻿using NModbus.Interfaces;
+using NModbus.Interfaces;
 
 namespace NModbus.Functions
 {
@@ -7,8 +7,8 @@ namespace NModbus.Functions
         public byte FunctionCode { get; }
 
         public ModbusServerFunction(
-            byte functionCode, 
-            IModbusMessageSerializer<TRequest, TResponse> messageSerializer, 
+            byte functionCode,
+            IModbusMessageSerializer<TRequest, TResponse> messageSerializer,
             IModbusFunctionImplementation<TRequest, TResponse> implementation)
         {
             FunctionCode = functionCode;

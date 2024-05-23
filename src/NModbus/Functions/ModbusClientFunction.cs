@@ -1,4 +1,4 @@
-﻿namespace NModbus.Functions
+namespace NModbus.Functions
 {
     public class ModbusClientFunction<TRequest, TResponse> : IClientFunction<TRequest, TResponse>
     {

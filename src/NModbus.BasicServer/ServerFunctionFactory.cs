@@ -1,4 +1,4 @@
-﻿using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using NModbus.BasicServer.Functions;
 using NModbus.BasicServer.Interfaces;
@@ -87,7 +87,7 @@ namespace NModbus.BasicServer
 
             if (customServerFunctions != null)
             {
-                foreach(var customServerFunction in customServerFunctions)
+                foreach (var customServerFunction in customServerFunctions)
                 {
                     dictionary[customServerFunction.FunctionCode] = customServerFunction;
                 }
@@ -98,3 +98,4 @@ namespace NModbus.BasicServer
         }
     }
 }
+

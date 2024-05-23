@@ -1,4 +1,4 @@
-﻿using NModbus.Functions;
+using NModbus.Functions;
 using NModbus.Interfaces;
 using NModbus.Messages;
 
@@ -64,18 +64,18 @@ namespace NModbus
         }
 
         public static async Task<bool[]> ReadCoilsAsync(
-            this IModbusClient client, 
-            byte unitIdentifier, 
-            ushort startingAddress, 
+            this IModbusClient client,
+            byte unitIdentifier,
+            ushort startingAddress,
             ushort quantityOfOutputs,
             CancellationToken cancellationToken = default)
         {
             var request = new ReadCoilsRequest(startingAddress, quantityOfOutputs);
 
             var response = await client.ExecuteAsync<ReadCoilsRequest, ReadCoilsResponse>(
-                ModbusFunctionCodes.ReadCoils, 
-                unitIdentifier, 
-                request, 
+                ModbusFunctionCodes.ReadCoils,
+                unitIdentifier,
+                request,
                 cancellationToken);
 
             return response.Unpack(request.QuantityOfOutputs);
@@ -91,9 +91,9 @@ namespace NModbus
             var request = new ReadDiscreteInputsRequest(startingAddress, quantityOfInputs);
 
             var response = await client.ExecuteAsync<ReadDiscreteInputsRequest, ReadDiscreteInputsResponse>(
-                ModbusFunctionCodes.ReadDiscreteInputs, 
-                unitIdentifier, 
-                request, 
+                ModbusFunctionCodes.ReadDiscreteInputs,
+                unitIdentifier,
+                request,
                 cancellationToken);
 
             return response.Unpack(request.QuantityOfInputs);
@@ -148,10 +148,10 @@ namespace NModbus
         }
 
         public static async Task WriteMultipleCoils(
-            this IModbusClient client, 
-            byte unitIdentifier, 
-            ushort startingAddress, 
-            bool[] outputsValue, 
+            this IModbusClient client,
+            byte unitIdentifier,
+            ushort startingAddress,
+            bool[] outputsValue,
             CancellationToken cancellationToken = default)
         {
             var request = new WriteMultipleCoilsRequest(startingAddress, outputsValue);
