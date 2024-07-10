@@ -1,4 +1,5 @@
 using System.Buffers.Binary;
+using System.IO.Ports;
 using NModbus.Interfaces;
 using NModbus.Messages;
 
@@ -8,14 +9,14 @@ public class SerialTransport : IModbusClientTransport
 {
     private const int RTU_MAX_SIZE = 256;
     private const int RTU_MIN_SIZE = 4;
-    private readonly Stream _stream;
+    private readonly SerialPort _serialPort;
     private readonly int _baudRate;
     private readonly IChecksum _checksum;
 
-    public SerialTransport(Stream stream, int baudRate)
+    public SerialTransport(SerialPort serialPort)
     {
-        _stream = stream ?? throw new ArgumentNullException(nameof(stream));
-        _baudRate = baudRate;
+        _serialPort = serialPort ?? throw new ArgumentNullException(nameof(serialPort));
+        _baudRate = serialPort.BaudRate;
         _checksum = new Crc();
     }
 
@@ -28,7 +29,7 @@ public class SerialTransport : IModbusClientTransport
 
         var crc = BitConverter.GetBytes(_checksum.Calculate(msg.AsSpan()[..^2]));
         Array.Copy(crc, 0, msg, msg.Length - 2, crc.Length);
-        await _stream.WriteAsync(msg, cancellationToken);
+        await _serialPort.BaseStream.WriteAsync(msg, cancellationToken);
 
         await Task.Delay(CalculateDelay(msg.Length), cancellationToken);
     }
@@ -44,7 +45,7 @@ public class SerialTransport : IModbusClientTransport
         var functionCodeFail = ModbusFunctionCodes.SetErrorBit(functionCode);
 
         var frame = new byte[RTU_MAX_SIZE];
-        var totalBytesRead = await _stream.ReadAsync(frame, 0, RTU_MIN_SIZE, cancellationToken);
+        var totalBytesRead = await _serialPort.BaseStream.ReadAsync(frame, 0, RTU_MIN_SIZE, cancellationToken);
         if (totalBytesRead == 0)
         {
             return null;
@@ -55,7 +56,8 @@ public class SerialTransport : IModbusClientTransport
             while (totalBytesRead < bytesToRead)
             {
                 var remainingBytes = bytesToRead - totalBytesRead;
-                var bytesRead = await _stream.ReadAsync(frame, totalBytesRead, remainingBytes, cancellationToken);
+                var bytesRead =
+                    await _serialPort.BaseStream.ReadAsync(frame, totalBytesRead, remainingBytes, cancellationToken);
                 if (bytesRead == 0)
                 {
                     return null;
@@ -67,7 +69,7 @@ public class SerialTransport : IModbusClientTransport
 
         if (frame[1] == functionCodeFail)
         {
-            _ = await _stream.ReadAsync(frame, totalBytesRead, 5, cancellationToken);
+            _ = await _serialPort.BaseStream.ReadAsync(frame, totalBytesRead, 5, cancellationToken);
         }
 
         var msg = frame[..totalBytesRead];
@@ -85,6 +87,11 @@ public class SerialTransport : IModbusClientTransport
 
     private bool VerifyCrc(ReadOnlySpan<byte> msg)
     {
+        if (msg.Length < 2)
+        {
+            return false;
+        }
+
         var expectedResponseCrc = _checksum.Calculate(msg[..^2]);
         var responseCrc = BitConverter.ToUInt16(msg[^2..]);
         return expectedResponseCrc == responseCrc;
@@ -142,7 +149,7 @@ public class SerialTransport : IModbusClientTransport
 
     public ValueTask DisposeAsync()
     {
-        _stream.Dispose();
+        _serialPort.Dispose();
         GC.SuppressFinalize(this);
         return new ValueTask();
     }

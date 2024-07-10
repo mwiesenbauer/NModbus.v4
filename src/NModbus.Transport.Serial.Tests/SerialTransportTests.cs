@@ -1,3 +1,4 @@
+using System.IO.Ports;
 using Moq;
 using NModbus.Interfaces;
 using NModbus.Messages;
@@ -12,7 +13,7 @@ public class SerialTransportTests
         _ = Assert.Throws<ArgumentNullException>(() =>
             {
 #pragma warning disable CS8625 // Cannot convert null literal to non-nullable reference type.
-                var transport = new SerialTransport(null, 0);
+                var transport = new SerialTransport(null);
 #pragma warning restore CS8625 // Cannot convert null literal to non-nullable reference type.
             }
         );
@@ -24,7 +25,8 @@ public class SerialTransportTests
         var expected = new byte[8] { 0x01, 0x03, 0x00, 0x00, 0x00, 0x01, 0x84, 0xA };
 
         var stream = new MemoryStream();
-        var transport = new SerialTransport(stream, 115200);
+        var serialPort = new FixedStreamSerialPort(stream);
+        var transport = new SerialTransport(serialPort);
         var request = new ReadHoldingRegistersRequest(0, 1);
         var serializer = new ReadHoldingRegistersMessageSerializer();
         var requestPayload = serializer.SerializeRequest(request);
@@ -64,7 +66,8 @@ public class SerialTransportTests
             .Callback((Memory<byte> buffer, CancellationToken _) => { expectedResponse.AsMemory(4..).CopyTo(buffer); })
             .ReturnsAsync(4);
 
-        var transport = new SerialTransport(stream.Object, 115200);
+        var serialPort = new FixedStreamSerialPort(stream.Object);
+        var transport = new SerialTransport(serialPort);
         var request = new WriteSingleRegisterRequest(0, 1);
         var serializer = new WriteSingleRegisterMessageSerializer();
         var requestPayload = serializer.SerializeRequest(request);
@@ -100,4 +103,18 @@ public class SerialTransportTests
         var crc = new Crc().Calculate(new byte[] { 0x02, 0x07 });
         Assert.Equal(0x1241, crc);
     }
+}
+
+internal class FixedStreamSerialPort : SerialPort
+{
+#pragma warning disable IDE0032
+    private readonly Stream _stream;
+
+    public FixedStreamSerialPort(Stream stream)
+    {
+        _stream = stream;
+    }
+
+    public new Stream BaseStream => _stream;
+#pragma warning restore IDE0032
 }
