@@ -24,7 +24,7 @@ serialPort.Open();
 serialPort.BaseStream.ReadTimeout = timeout;
 serialPort.BaseStream.WriteTimeout = timeout;
 
-var serialTransport = new SerialTransport(serialPort.BaseStream, serialPort.BaudRate);
+var serialTransport = new SerialTransport(serialPort);
 var client = new ModbusClient(serialTransport, loggerFactory);
 using var cts = new CancellationTokenSource();
 await client.WriteSingleRegisterAsync(0, 4, 1, cts.Token);
