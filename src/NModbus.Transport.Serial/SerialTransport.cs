@@ -29,14 +29,14 @@ public class SerialTransport : IModbusClientTransport
 
         var crc = BitConverter.GetBytes(_checksum.Calculate(msg.AsSpan()[..^2]));
         Array.Copy(crc, 0, msg, msg.Length - 2, crc.Length);
-        await _serialPort.BaseStream.WriteAsync(msg, cancellationToken);
+        await WriteAsync(msg, cancellationToken);
 
         await Task.Delay(CalculateDelay(msg.Length), cancellationToken);
     }
 
     public async Task<IModbusDataUnit?> SendAndReceiveAsync(
         IModbusDataUnit message,
-        CancellationToken cancellationToken = default
+        CancellationToken cancellationToken = default!
     )
     {
         await SendAsync(message, cancellationToken);
@@ -45,7 +45,7 @@ public class SerialTransport : IModbusClientTransport
         var functionCodeFail = ModbusFunctionCodes.SetErrorBit(functionCode);
 
         var frame = new byte[RTU_MAX_SIZE];
-        var totalBytesRead = await _serialPort.BaseStream.ReadAsync(frame, 0, RTU_MIN_SIZE, cancellationToken);
+        var totalBytesRead = await ReadAsync(frame, 0, RTU_MIN_SIZE, cancellationToken);
         if (totalBytesRead == 0)
         {
             return null;
@@ -56,8 +56,7 @@ public class SerialTransport : IModbusClientTransport
             while (totalBytesRead < bytesToRead)
             {
                 var remainingBytes = bytesToRead - totalBytesRead;
-                var bytesRead =
-                    await _serialPort.BaseStream.ReadAsync(frame, totalBytesRead, remainingBytes, cancellationToken);
+                var bytesRead = await ReadAsync(frame, totalBytesRead, remainingBytes, cancellationToken);
                 if (bytesRead == 0)
                 {
                     return null;
@@ -69,7 +68,7 @@ public class SerialTransport : IModbusClientTransport
 
         if (frame[1] == functionCodeFail)
         {
-            _ = await _serialPort.BaseStream.ReadAsync(frame, totalBytesRead, 5, cancellationToken);
+            _ = await ReadAsync(frame, totalBytesRead, 5, cancellationToken);
         }
 
         var msg = frame[..totalBytesRead];
@@ -83,6 +82,53 @@ public class SerialTransport : IModbusClientTransport
             message.UnitIdentifier,
             new ProtocolDataUnit(functionCode, data)
         );
+    }
+
+    private ValueTask WriteAsync(Memory<byte> msg, CancellationToken cancellationToken)
+    {
+        var cancellationTokenSource = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
+        cancellationTokenSource.CancelAfter(_serialPort.WriteTimeout);
+        using var cancellationTokenRegistration = cancellationTokenSource.Token.Register(
+            () =>
+            {
+                if (_serialPort.IsOpen)
+                {
+                    _serialPort.DiscardOutBuffer();
+                }
+            }
+        );
+        try
+        {
+            return _serialPort.BaseStream.WriteAsync(msg, cancellationToken);
+        }
+        catch (OperationCanceledException)
+        {
+            throw new TimeoutException();
+        }
+    }
+
+    private Task<int> ReadAsync(byte[] buffer, int offset, int count, CancellationToken cancellationToken)
+    {
+        var cancellationTokenSource = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
+        cancellationTokenSource.CancelAfter(_serialPort.ReadTimeout);
+        using var cancellationTokenRegistration = cancellationTokenSource.Token.Register(
+            () =>
+            {
+                if (_serialPort.IsOpen)
+                {
+                    _serialPort.DiscardInBuffer();
+                }
+            }
+        );
+
+        try
+        {
+            return _serialPort.BaseStream.ReadAsync(buffer, offset, count, cancellationTokenSource.Token);
+        }
+        catch (OperationCanceledException)
+        {
+            throw new TimeoutException();
+        }
     }
 
     private bool VerifyCrc(ReadOnlySpan<byte> msg)

@@ -14,7 +14,7 @@ var loggerFactory = LoggerFactory.Create(builder =>
 });
 
 var timeout = (int)TimeSpan.FromMilliseconds(100).TotalMilliseconds;
-var serialPort = new SerialPort("/dev/tty.usbserial-FT3G9TH30", baudRate, Parity.None, dataBits, StopBits.Two)
+var serialPort = new SerialPort("/dev/tty.usbserial-FT4YFJ4T3", baudRate, Parity.None, dataBits, StopBits.Two)
 {
     NewLine = "\r\n",
     ReadTimeout = timeout,
@@ -28,7 +28,7 @@ var serialTransport = new SerialTransport(serialPort);
 var client = new ModbusClient(serialTransport, loggerFactory);
 using var cts = new CancellationTokenSource();
 await client.WriteSingleRegisterAsync(0, 4, 1, cts.Token);
-await Task.Delay(TimeSpan.FromSeconds(5), cts.Token);
+await Task.Delay(TimeSpan.FromMilliseconds(50), cts.Token);
 
 for (byte address = 1; address < byte.MaxValue; address++)
 {
